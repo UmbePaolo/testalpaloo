@@ -1,0 +1,108 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "JSON Schema for SkiDay",
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "string"
+    },
+    "userName": {
+      "type": "string"
+    },
+    "userSurname": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "integer"
+    },
+    "resortName": {
+      "type": "string"
+    },
+    "resortImgAvatar": {
+      "type": "string"
+    },
+    "mtTotRisaliti": {
+      "type": "integer"
+    },
+    "kmTotDiscesi": {
+      "type": "integer"
+    },
+    "hTotAttivita": {
+      "type": "integer"
+    },
+    "toLifts": {
+      "type": "integer"
+    },
+    "facebookUrl": {
+      "type": "string"
+    },
+    "liftsTaken": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "liftName": {
+            "type": "string"
+          },
+          "liftLocation": {
+            "type": "string"
+          },
+          "distMed": {
+            "type": "integer"
+          },
+          "difAlt": {
+            "type": "integer"
+          },
+          "arrAlt": {
+            "type": "integer"
+          },
+          "startAlt": {
+            "type": "integer"
+          },
+          "liftTime": {
+            "type": "string"
+          },
+          "resortLogo": {
+            "type": "string"
+          },
+          "liftResort": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "liftName",
+          "liftLocation",
+          "distMed",
+          "difAlt",
+          "arrAlt",
+          "startAlt",
+          "liftTime",
+          "resortLogo",
+          "liftResort",
+          "icon"
+        ]
+      }
+    }
+  },
+  "required": [
+    "date",
+    "avatar",
+    "userName",
+    "userSurname",
+    "userId",
+    "resortName",
+    "resortImgAvatar",
+    "mtTotRisaliti",
+    "kmTotDiscesi",
+    "hTotAttivita",
+    "toLifts",
+    "facebookUrl",
+    "liftsTaken"
+  ]
+}
