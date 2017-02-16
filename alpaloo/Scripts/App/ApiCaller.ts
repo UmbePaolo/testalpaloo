@@ -13,11 +13,6 @@ declare var Base64: any;
 var token;
 var hdnUserId;
 
-$(document).ready(function () {
-    SetToken();
-});
-
-
 // ***************** Funzioni per le api
 
 function SetToken() {
@@ -43,8 +38,8 @@ var setCustomHeaderToken = function setCustomHeaderToken(xhr) {
 function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
     // Send an AJAX request
     $.ajax({
-        url: domain + uri,
-        type: 'POST',
+        url: 'http://localhost/alpaloo/sample.json',//domain + uri,
+        type: 'GET',
         dataType: 'json',
         data: processObj,
         processData: false,

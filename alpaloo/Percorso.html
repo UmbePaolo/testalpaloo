@@ -8,39 +8,71 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://www.alpaloo.com/css/global.css" />
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
     <script type="text/javascript" src="https://www.alpaloo.com/js/highcharts.js"></script>
     <script type="text/javascript" src="https://wsapi.alpaloo.com/Scripts/Base64.js"></script>
     <script src="Scripts/App/CustomGraph.js"></script>
     <script src="Scripts/App/Common.js"></script>
     <script src="Scripts/App/ApiCaller.js"></script>
     <script src="Scripts/App/PlayerController.js"></script>
+    <script src="Scripts/App/PathController.js"></script>
     <style type="text/css">
         #avatar {
             border: 1px solid green;
             background: white;
             top: 700px;
             position: absolute;
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
         /* Custom container */
         .container-full {
             margin: 0 auto;
             width: 100%;
         }
+
+        .notransition {
+            -webkit-transition: none !important;
+            -moz-transition: none !important;
+            -o-transition: none !important;
+            transition: none !important;
+        }
+
+
+        .myModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .8 ) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+            body.loading .myModal {
+                display: block;
+            }
     </style>
 </head>
 <body style="background-color:transparent;">
-    <div style="cursor:zoom-in;">
-        <div>
-            <img style="position:absolute;z-index:1" src="http://www.esmnovara.it/TEST_ALPALOO/Logo_alpaloo_blu.png" class="img-responsive" />
-            <img id="skiramaImg" style="position:relative;z-index:0;height:700px;width:1278px;" class="img-responsive" />
-        </div>
-    </div>
-    <div id="avatar" style="left: 63px;top:640px;width:40px;height:40px;" class="thumbnail-crop">
+    <!--<div style="cursor:zoom-in;">-->
+    <img style="position:absolute;z-index:1" src="http://www.esmnovara.it/TEST_ALPALOO/Logo_alpaloo_blu.png" class="img-responsive" />
+    <canvas id="imgCanvas" style="background-size: 100% 100%;position:relative;z-index:0;height:750px;width:100%;">
+        <!--<img id="skiramaImg" style="position:relative;z-index:0;height:750px;width:1278px;" class="img-responsive" />-->
+    </canvas>
+    <!--</div>-->
+    <div id="avatar" style="left: -63px;top:-50px;width:40px;height:40px;" class="thumbnail-crop">
         <img src="https://www.alpaloo.com/User/Photo/6617.png" class="img-responsive img-circle">
     </div>
     <div class="container-fluid text-center" style="background-color:black;padding:0;">
-        <div id="Controlli" >
+        <div id="Controlli">
             <button type="button" id="button_fbw" class="btn" onclick='buttonRewindPress()'>
                 <i class="fa fa-fast-backward"></i>
             </button>
@@ -63,18 +95,13 @@
 
             <button type="button" id="button_ffw" class="btn" onclick='buttonFastforwardPress()'>
                 <i class="fa fa-fast-forward"></i>
-            </button> 
+            </button>
         </div>
     </div>
-    <div class="container-fluid " style="background-color:yellow;padding:0;">
-        <div id="myChart" style="height:250px;">
+    <!--<div class="container-fluid " style="padding:0;">-->
+        <div id="myChart" style="height:250px;padding:0;">
         </div>
-    </div>
-
-    <!--Da Cancellare in produzione-->
-    <div style="visibility:hidden;">
-        <label id="resultToken" class="wordwrap"></label>
-        <label id="hdnUserId" class="wordwrap"></label>
-    </div>
+    <!--</div>-->
+    <div class="myModal"><!-- Place at bottom of page --></div>
 </body>
 </html>

@@ -1,6 +1,18 @@
 var data;
-/// <reference path="CustomGraph.js" />
+var indiceWayPoint = 0;
+var timer; //timer per il movimento del WayPoint
+var avatarReady = false;
+var avatar; //la div dell'avatar
+var arrayDistanzaX = [];
+var arrayDistanzaY = [];
 var state = 'stop';
+var mioBody;
+$(document).ready(function () {
+    mioBody = $("body");
+    mioBody.addClass("loading");
+    SetToken();
+    avatar = $("#avatar");
+});
 var qs = (function (a) {
     if (a == "")
         return {};
@@ -14,24 +26,32 @@ var qs = (function (a) {
     }
     return b;
 })(window.location.search.substr(1).split('&'));
-//import custGraph = require('CustomGraph');
 function setData(d) {
     data = d;
-    loadImage(data);
+    data.liftsTaken.sort(function (lt1, lt2) {
+        if (lt1.liftTime < lt2.liftTime)
+            return -1;
+        if (lt1.liftTime > lt2.liftTime)
+            return 1;
+        return 0;
+    });
+    prepareAvatar();
+    loadImage();
     loadGrafico();
+    mioBody.removeClass("loading");
 }
-function loadImage(d) {
-    var img = $("#skiramaImg")[0];
-    if (img) {
-        switch (d.resortName) {
+function loadImage() {
+    var imgCanvas = $("#imgCanvas");
+    if (imgCanvas) {
+        switch (data.resortName) {
             case 'Courmayeur':
-                img.src = 'img/skirama-courmayeur.png';
+                imgCanvas.css('background-image', 'url(http://www.esmnovara.it/TEST_ALPALOO/skirama-courmayeur-v2.png)');
                 break;
             case 'Monterosa':
-                img.src = 'img/skirama-monterosa.png';
+                imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
                 break;
             default:
-                img.src = 'img/skirama-courmayeur.png';
+                imgCanvas.css('background-image', 'url(img/skirama-courmayeur.png)');
         }
     }
 }

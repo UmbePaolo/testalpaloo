@@ -7,9 +7,6 @@ var hackPassword = 'nessuna';
 // ********* fine hack ********
 var token;
 var hdnUserId;
-$(document).ready(function () {
-    SetToken();
-});
 // ***************** Funzioni per le api
 function SetToken() {
     // url
@@ -29,8 +26,8 @@ var setCustomHeaderToken = function setCustomHeaderToken(xhr) {
 function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
     // Send an AJAX request
     $.ajax({
-        url: domain + uri,
-        type: 'POST',
+        url: 'http://localhost/alpaloo/sample.json',
+        type: 'GET',
         dataType: 'json',
         data: processObj,
         processData: false,

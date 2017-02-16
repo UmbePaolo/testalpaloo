@@ -26,7 +26,7 @@ function loadGrafico() {
             }
     });
 
-    $.each(data.liftsTaken.reverse(), function (key, d) {
+    $.each(data.liftsTaken, function (key, d) {
         //var series = { name: data.userSurname, data: [], color: '#e84e1b' };
 
         //series.data.push(new Date(d.liftTime), d.arrAlt);
@@ -116,7 +116,7 @@ function loadGrafico() {
                 point: {
                     events: {
                         click: function (e) {
-                            alert(this.index);
+                            doMoveAtPoint(this.index);
                         }
                     }
                 },
@@ -127,7 +127,6 @@ function loadGrafico() {
         },
         chart: {
             color: '',
-            renderTo: 'myChart',
             backgroundColor: {
                 linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
                 stops: [
@@ -135,6 +134,7 @@ function loadGrafico() {
                    [1, '#3e3e40']
                 ]
             },
+            width:1263,
             type: 'line',
             plotBorderColor: '#606063'
         },
