@@ -7,9 +7,9 @@ var arrayDistanzaX = [];
 var arrayDistanzaY = [];
 var state = 'stop';
 var mioBody;
+var lineWidth = 2;
 $(document).ready(function () {
     mioBody = $("body");
-    mioBody.addClass("loading");
     SetToken();
     avatar = $("#avatar");
 });
@@ -38,7 +38,14 @@ function setData(d) {
     prepareAvatar();
     loadImage();
     loadGrafico();
-    mioBody.removeClass("loading");
+    drawLines();
+}
+function LiftsTakenEquals(lt1, lt2) {
+    //return lt1.liftStartTop === lt2.liftStartTop && lt1.liftStartLeft === lt2.liftStartLeft
+    //    && lt1.liftEndTop === lt2.liftEndTop && lt1.liftEndLeft === lt2.liftEndLeft;
+    if (!lt1 || !lt2)
+        return false;
+    return lt1.liftName === lt2.liftName;
 }
 function loadImage() {
     var imgCanvas = $("#imgCanvas");
@@ -54,5 +61,8 @@ function loadImage() {
                 imgCanvas.css('background-image', 'url(img/skirama-courmayeur.png)');
         }
     }
+}
+function getPoint(val, hundredPercent) {
+    return Math.floor((val / 100) * hundredPercent);
 }
 //# sourceMappingURL=Common.js.map

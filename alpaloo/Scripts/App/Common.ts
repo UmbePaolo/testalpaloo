@@ -7,11 +7,11 @@ var arrayDistanzaX: number[] = [];
 var arrayDistanzaY: number[] = [];
 var state = 'stop';
 var mioBody;
+var lineWidth: number = 2;
 
 declare function loadGrafico(): void;
 $(document).ready(function () {
     mioBody = $("body");
-    mioBody.addClass("loading"); 
     SetToken();
     avatar = $("#avatar");
 });
@@ -41,7 +41,15 @@ function setData(d) {
     prepareAvatar();
     loadImage();
     loadGrafico();
-    mioBody.removeClass("loading");
+    drawLines();
+}
+
+function LiftsTakenEquals(lt1: namespace.ILiftsTaken, lt2: namespace.ILiftsTaken) {
+    //return lt1.liftStartTop === lt2.liftStartTop && lt1.liftStartLeft === lt2.liftStartLeft
+    //    && lt1.liftEndTop === lt2.liftEndTop && lt1.liftEndLeft === lt2.liftEndLeft;
+    if (!lt1 || !lt2)
+        return false;
+    return lt1.liftName === lt2.liftName;
 }
 
 function loadImage() {
@@ -49,7 +57,7 @@ function loadImage() {
     if (imgCanvas) {
         switch (data.resortName) {
             case 'Courmayeur':
-                imgCanvas.css('background-image', 'url(http://www.esmnovara.it/TEST_ALPALOO/skirama-courmayeur-v2.png)');
+                imgCanvas.css('background-image',  'url(http://www.esmnovara.it/TEST_ALPALOO/skirama-courmayeur-v2.png)');
                 break;
             case 'Monterosa':
                 imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
@@ -58,4 +66,8 @@ function loadImage() {
                 imgCanvas.css('background-image', 'url(img/skirama-courmayeur.png)');
         }
     }
+}
+
+function getPoint(val: number,hundredPercent: number) {
+    return Math.floor((val / 100) * hundredPercent);
 }

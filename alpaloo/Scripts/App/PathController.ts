@@ -2,7 +2,8 @@
 
 function prepareAvatar() {
     avatar.hide();
-    var map = document.getElementById("imgCanvas");
+    var map = <HTMLCanvasElement>document.getElementById("imgCanvas");
+    map.width = $(window).width();
   
     //Dati necessari: 
     // 1) nello skiday:
@@ -14,15 +15,18 @@ function prepareAvatar() {
     var altezzaMappaY = map.clientHeight;
 
     $.each(data.liftsTaken, function (key, d) {
-        arrayDistanzaX.push(Math.floor((d.liftStartLeft / 100) * larghezzaMappaX));
-        arrayDistanzaY.push(Math.floor((d.liftStartTop / 100) * altezzaMappaY));
-        arrayDistanzaX.push(Math.floor((d.liftEndLeft / 100) * larghezzaMappaX));
-        arrayDistanzaY.push(Math.floor((d.liftEndTop / 100) * altezzaMappaY));
+        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) - 20);
+        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + 30);
+        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) - 20);
+        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 30);
     });
 
     avatar.css("top", arrayDistanzaY[0] + 'px');
     avatar.css("left", arrayDistanzaX[0] + 'px');
     indiceWayPoint++;
+    var an = $("#avatarName");
+    an.text(data.userName + ' ' + data.userSurname);
+    an.css('margin-left', -(avatar.width() / 2) + 20 + 'px');
     avatar.show();
     avatarReady = true;
 }

@@ -112,6 +112,7 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <TypeScriptCompile Include="Scripts\App\Common.ts" />
     <TypeScriptCompile Include="Scripts\App\ApiCaller.ts" />
+    <TypeScriptCompile Include="Scripts\App\LineMaker.ts" />
     <TypeScriptCompile Include="Scripts\App\PathController.ts" />
     <TypeScriptCompile Include="Scripts\App\PlayerController.ts" />
     <Content Include="Scripts\bootstrap.js" />

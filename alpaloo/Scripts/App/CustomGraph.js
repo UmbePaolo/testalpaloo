@@ -1,8 +1,18 @@
 ﻿/// <reference path="Common.ts" />
 /// <reference path="highcharts.js"/>
 
+function frequencies(/* {Array} */ a) {
+    return new Map([...new Set(a)].map(
+        x =>[x, a.filter(y => LiftsTakenEquals(y,x)).length]
+    ));
+}
+
+
 function loadGrafico() {
     var seriesArr = [];
+
+    var test = frequencies(data.liftsTaken);
+
 
     var highchartsOptions = Highcharts.setOptions({
         lang:
@@ -134,7 +144,7 @@ function loadGrafico() {
                    [1, '#3e3e40']
                 ]
             },
-            width:1263,
+            //width:1263,
             type: 'line',
             plotBorderColor: '#606063'
         },
