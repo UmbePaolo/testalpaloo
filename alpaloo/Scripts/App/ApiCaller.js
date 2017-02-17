@@ -26,7 +26,7 @@ var setCustomHeaderToken = function setCustomHeaderToken(xhr) {
 function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
     // Send an AJAX request
     $.ajax({
-        url: 'http://localhost/alpaloo/sample.json',
+        url: 'sample.json',
         type: 'GET',
         dataType: 'json',
         data: processObj,
