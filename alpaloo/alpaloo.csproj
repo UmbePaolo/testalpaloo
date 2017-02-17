@@ -81,7 +81,7 @@
     <Content Include="img\skirama_lathuile.png" />
     <Content Include="img\tapis_roulant.png" />
     <Content Include="packages.config" />
-    <Content Include="Scripts\App\highcharts.js" />
+    <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="sample.json" />
     <None Include="Web.Debug.config">
