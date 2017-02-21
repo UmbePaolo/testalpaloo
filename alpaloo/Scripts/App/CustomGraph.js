@@ -48,7 +48,7 @@ function loadGrafico() {
         seriesArr.push(punto);
 
         var punto = {
-            x: dt + 600000, //metto attualmente un viaggio di 10 minuti
+            x: dt + 300000, //metto attualmente un viaggio di 5 minuti
             y: d.arrAlt
         };
 
@@ -109,7 +109,7 @@ function loadGrafico() {
             },
             type: 'datetime',
             dateTimeLabelFormats: {
-                minute: '%H:%M'
+                minute: '%H:%M:%S'
             }
         },
         yAxis: {
@@ -160,7 +160,7 @@ function loadGrafico() {
         series: [{}]
     };
 
-    options.series[0].data = seriesArr;
+    options.series[0].data = seriesArr;    
     $("#myChart").highcharts(options);
     $(".highcharts-button").hide();
 

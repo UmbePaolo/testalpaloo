@@ -31,8 +31,8 @@ var setCustomHeaderToken = function setCustomHeaderToken(xhr) {
 function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
     // Send an AJAX request
     $.ajax({
-        url: 'sample.json',//domain + uri,
-        type: 'GET',
+        url: domain + uri,
+        type: 'POST',
         dataType: 'json',
         data: processObj,
         processData: false,

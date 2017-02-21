@@ -3,7 +3,7 @@
 function prepareAvatar() {
     avatar.hide();
     var map = <HTMLCanvasElement>document.getElementById("imgCanvas");
-    map.width = $(window).width();
+    //map.width = $(window).width();
   
     //Dati necessari: 
     // 1) nello skiday:
@@ -11,8 +11,8 @@ function prepareAvatar() {
     //le coordinate devono però essere quelle esatte dei tornelli di partenza ed arrivo degli impianti
 
     //___1___CALCOLO LE POSIZIONI IN PIXEL___ 
-    var larghezzaMappaX = map.clientWidth;
-    var altezzaMappaY = map.clientHeight;
+    var larghezzaMappaX = map.width;
+    var altezzaMappaY = map.height;
 
     $.each(data.liftsTaken, function (key, d) {
         arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) - 20);

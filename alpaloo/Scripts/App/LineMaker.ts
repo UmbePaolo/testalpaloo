@@ -6,8 +6,8 @@ function drawLines(ctx) {
     var lts: namespace.ILiftsTaken[] = [], nums: number[] = [];
     contaOccorrenze(lts, nums);
 
-    var larghezzaMappaX = canvas.clientWidth;
-    var altezzaMappaY = canvas.clientHeight;
+    var larghezzaMappaX = canvas.width;
+    var altezzaMappaY = canvas.height;
 
     for (var i = 0; i < lts.length; i++) {
         var x1 = getPoint(lts[i].liftStartLeft, larghezzaMappaX);

@@ -49,8 +49,6 @@ function setData(d) {
         return 0;
     });
     loadImage();
-    prepareAvatar();
-    loadGrafico();
 }
 
 function LiftsTakenEquals(lt1: namespace.ILiftsTaken, lt2: namespace.ILiftsTaken) {
@@ -68,11 +66,18 @@ function loadImage() {
     img.onload = function () {
         var canvas = <HTMLCanvasElement>document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
-        //var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.clientWidth, canvas.clientHeight);
+        var ratio = img.width / $(window).innerWidth();
+        canvas.height = img.height * ratio;
+        canvas.width = $(window).innerWidth();
+
+        var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.width, canvas.height);
 
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
         drawLines(ctx);
+        prepareAvatar();
+        //mioBody.show();
+        loadGrafico();
     }
 
     //var imgCanvas = $("#imgCanvas");
