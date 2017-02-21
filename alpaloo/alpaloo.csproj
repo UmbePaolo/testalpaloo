@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\cabinovia.png" />
+    <Content Include="img\Courmayeur.png" />
     <Content Include="img\funicolare.png" />
     <Content Include="img\funivia.png" />
     <Content Include="img\seggiovia.png" />
@@ -112,6 +113,7 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <TypeScriptCompile Include="Scripts\App\Common.ts" />
     <TypeScriptCompile Include="Scripts\App\ApiCaller.ts" />
+    <TypeScriptCompile Include="Scripts\App\FbScript.ts" />
     <TypeScriptCompile Include="Scripts\App\LineMaker.ts" />
     <TypeScriptCompile Include="Scripts\App\PathController.ts" />
     <TypeScriptCompile Include="Scripts\App\PlayerController.ts" />
@@ -120,6 +122,7 @@
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Web.config" />
+    <TypeScriptCompile Include="Scripts\typings\facebook-js-sdk\facebook-js-sdk.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,5 @@
 /// <reference path="Common.ts" />
 /// <reference path="SkiDay.ts" />
-// ********* hack ********
-var domain = "http://testapib2c.alpaloo.com/";
-var hackUsername = 'mia@tua.it';
-var hackPassword = 'nessuna';
-// ********* fine hack ********
 var token;
 var hdnUserId;
 // ***************** Funzioni per le api

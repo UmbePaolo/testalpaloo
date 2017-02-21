@@ -1,15 +1,8 @@
 ﻿/// <reference path="Common.ts" />
 /// <reference path="SkiDay.ts" />
 
-// ********* hack ********
-var domain = "http://testapib2c.alpaloo.com/";
-var hackUsername = 'mia@tua.it';
-var hackPassword = 'nessuna';
 
 declare var Base64: any;
-
-// ********* fine hack ********
-
 var token;
 var hdnUserId;
 

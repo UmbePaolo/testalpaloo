@@ -1,4 +1,15 @@
-﻿var data: namespace.ISkiDay;
+﻿//Variabili modificabili
+
+// ********* hack ********
+var domain = "http://testapib2c.alpaloo.com/";
+var hackUsername = 'mia@tua.it';
+var hackPassword = 'nessuna';
+// ********* fine hack ********
+
+//Fine variabili modificabili
+
+
+var data: namespace.ISkiDay;
 var indiceWayPoint: number = 0;
 var timer: number; //timer per il movimento del WayPoint
 var avatarReady: boolean = false;
@@ -7,7 +18,6 @@ var arrayDistanzaX: number[] = [];
 var arrayDistanzaY: number[] = [];
 var state = 'stop';
 var mioBody;
-var lineWidth: number = 2;
 
 declare function loadGrafico(): void;
 $(document).ready(function () {
@@ -38,10 +48,9 @@ function setData(d) {
             return 1;
         return 0;
     });
-    prepareAvatar();
     loadImage();
+    prepareAvatar();
     loadGrafico();
-    drawLines();
 }
 
 function LiftsTakenEquals(lt1: namespace.ILiftsTaken, lt2: namespace.ILiftsTaken) {
@@ -53,21 +62,44 @@ function LiftsTakenEquals(lt1: namespace.ILiftsTaken, lt2: namespace.ILiftsTaken
 }
 
 function loadImage() {
-    var imgCanvas = $("#imgCanvas");
-    if (imgCanvas) {
-        switch (data.resortName) {
-            case 'Courmayeur':
-                imgCanvas.css('background-image',  'url(http://www.esmnovara.it/TEST_ALPALOO/skirama-courmayeur-v2.png)');
-                break;
-            case 'Monterosa':
-                imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
-                break;
-            default:
-                imgCanvas.css('background-image', 'url(img/skirama-courmayeur.png)');
-        }
+    var img: HTMLImageElement = document.createElement("img");
+    img.src = 'img/Courmayeur.png';
+
+    img.onload = function () {
+        var canvas = <HTMLCanvasElement>document.getElementById("imgCanvas");
+        var ctx = canvas.getContext("2d");
+        //var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.clientWidth, canvas.clientHeight);
+
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        drawLines(ctx);
     }
+
+    //var imgCanvas = $("#imgCanvas");
+    //if (imgCanvas) {
+    //    switch (data.resortName) {
+    //        case 'Courmayeur':
+    //            imgCanvas.css('background-image',  'url(img/Courmayeur.png)');
+    //            break;
+    //        case 'Monterosa':
+    //            imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
+    //            break;
+    //        default:
+    //            imgCanvas.css('background-image', 'url(img/Courmayeur.png)');
+    //    }
+    //}
 }
 
 function getPoint(val: number,hundredPercent: number) {
     return Math.floor((val / 100) * hundredPercent);
+}
+
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+    var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+    var rtnWidth = srcWidth * ratio;
+    var rtnHeight = srcHeight * ratio;
+    return {
+        width: rtnWidth,
+        height: rtnHeight
+    };
 }

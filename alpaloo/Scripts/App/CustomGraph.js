@@ -38,9 +38,11 @@ function loadGrafico() {
         var punto = {
             x: dt,
             y: d.arrAlt - d.difAlt,
-            marker: {
-                symbol: 'url(img/' + d.icon.replace("svg", "png") + ')'
-            }
+            custImg: 'img/' + d.icon.replace("svg", "png"),
+            custResort: d.liftName
+            //,marker: {
+            //    symbol: 'url(img/' + d.icon.replace("svg", "png") + ')'
+            //}
         };
 
         seriesArr.push(punto);
@@ -63,9 +65,32 @@ function loadGrafico() {
             enabled: false
         },
         tooltip: {
-            headerFormat: '<b>{point.key}</b><br/>',
-            pointFormat: '{point.y} mt'
+            useHTML: true,
+            formatter: function () {
+                var custImg = this.point.custImg;
+                var custResort = this.point.custResort;
+                var dato = '';// '<b>' + new Date(this.point.category).toTimeString().split(' ')[0] + '</b><br/>' + this.point.y + ' mt';
+                if (custImg) {
+                    dato = '<img src="' + custImg + '" title="" alt="" border="0">' + dato;
+                }
+                if (custResort) {
+                    dato = dato + '<b>' + custResort + '</b><br/>';
+                }
+                return '<div style="width:100px; height:50px;">' + dato + this.point.y + ' mt</div>';
+            },
+            backgroundColor: '#e84e1b'
         },
+        //tooltip: {
+        //    //headerFormat: '<b>{point.key}</b><br/>',
+        //    //pointFormat: '{point.y} mt',
+        //    seHTML: true,
+        //    formatter: function () {
+        //        var cust = this.point.cust;
+        //        if (cust) {
+        //            return '<img src="' + cust + '" />' + '<b>' + this.point.y + '</b>';
+        //        }
+        //    }
+        //},
         xAxis: {
             gridLineColor: '#707073',
             labels: {
@@ -128,13 +153,6 @@ function loadGrafico() {
         },
         chart: {
             color: '',
-            backgroundColor: {
-                linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-                stops: [
-                   [0, '#2a2a2b'],
-                   [1, '#3e3e40']
-                ]
-            },
             //width:1263,
             type: 'line',
             plotBorderColor: '#606063'

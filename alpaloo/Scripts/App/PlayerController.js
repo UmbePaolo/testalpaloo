@@ -19,7 +19,7 @@ function buttonPlayPress() {
         button.attr('class', "fa fa-pause");
         //___3___FACCIO PARTIRE IL PERCORSO___
         doMove;
-        timer = setInterval(doMove, 1500);
+        timer = setInterval(doMove, 1100);
     }
     else if (state == 'play' || state == 'resume') {
         state = 'pause';
@@ -30,7 +30,7 @@ function buttonPlayPress() {
         state = 'resume';
         $("#button_play i").attr('class', "fa fa-pause");
         doMove;
-        timer = setInterval(doMove, 1500);
+        timer = setInterval(doMove, 1100);
     }
     console.log("button play pressed, play was " + state);
 }

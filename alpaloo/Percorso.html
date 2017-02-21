@@ -3,6 +3,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta property="fb:app_id" content="794992523986979" />
+    <meta property="og:site_name" content="Alpaloo" />
+    <meta property="og:title" content="Mappa di una sciata" />
+
+    <meta property="og:url" content="http://localhost/alpaloo/Percorso.html?uid=6617&date=10/12/2016&loc=Pontedilegno%20-%20Tonale" />
+    <meta property="og:locale" content="it-IT" />
+    <meta property="og:type" content="fitness.course" />
+    <meta property="og:title" content="Supera te stesso" />
+    <meta property="og:description" content="Entra nella community di appassionati della neve e condividi le tue performance in pista." />
+    <!--<meta property="og:image" content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />-->
+
     <title></title>
     <meta charset="utf-8" />
     <script type="text/javascript" src="//code.jquery.com/jquery-1.8.3.js"></script>
@@ -18,15 +29,16 @@
     <script src="Scripts/App/PlayerController.js"></script>
     <script src="Scripts/App/PathController.js"></script>
     <script src="Scripts/App/LineMaker.js"></script>
+    <script src="Scripts/App/FbScript.js"></script>
     <style type="text/css">
         #avatar {
             background: transparent;
             top: 700px;
             position: absolute;
-            -webkit-transition: all 1s ease-out;
-            -moz-transition: all 1s ease-out;
-            -o-transition: all 1s ease-out;
-            transition: all 1s ease-out;
+            -webkit-transition: all 0.8s ease-out;
+            -moz-transition: all 0.8s ease-out;
+            -o-transition: all 0.8s ease-out;
+            transition: all 0.8s ease-out;
         }
         /* Custom container */
         .container-full {
@@ -59,24 +71,64 @@
             body.loading .myModal {
                 display: block;
             }
+
+        .btn {
+            background-color: #fea830;
+        }
+
+            .btn:hover {
+                background-color: #fa9201;
+            }
     </style>
+
+    <script>
+        //script per FB
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '794992523986979',
+                xfbml: true,
+                version: 'v2.8'
+            });
+        };
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/it_IT/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 </head>
 <body style="background-color:transparent;min-height: 100vh">
     <div style="cursor:zoom-in;position:relative;">
         <img style="position:absolute;z-index:1" src="http://www.esmnovara.it/TEST_ALPALOO/Logo_alpaloo_blu.png" class="img-responsive" />
-        <canvas id="imgCanvas" style="background-size: 100% 100%;position:relative;z-index:0;" height="750" >
+        <canvas id="imgCanvas" style="background-size: 100% 100%;position:relative;z-index:0;vertical-align: top;" height="750">
             <!--<img id="skiramaImg" style="position:relative;z-index:0;height:750px;width:1278px;" class="img-responsive" />-->
         </canvas>
-        <menu id="controls" style="position: absolute; right:50px; bottom: 50px;">
-            <button type="button" id="button_play" class="btn" onclick='buttonPlayPress()'>
-                <i class="fa fa-play"></i>
-            </button>
-            <button type="button" id="button_stop" class="btn" onclick='buttonStopPress()'>
-                <i class="fa fa-stop"></i>
-            </button>
-        </menu>
+
     </div>
-    <div id="avatar" style="left: -63px;top:-50px;" >
+    <div id="controls" style="width:100%;padding-left:30px;padding-right:30px;vertical-align: middle;">
+        <button type="button" id="button_play" class="btn" onclick='buttonPlayPress()'>
+            <i class="fa fa-play" style="color:#965d25"></i>
+        </button>
+        <button type="button" id="button_stop" class="btn" onclick='buttonStopPress()'>
+            <i class="fa fa-stop" style="color:#965d25"></i>
+        </button>
+        <!--<button id='shareFB' class='btn' style="background-color:#4267b2; color:white;" onclick='ShareFB();'>
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+        </button>-->
+        <div id="divFB" class="fb-share-button" style="float:right;margin-top:3px;" data-href=""
+             data-layout="button" data-size="large"
+             data-mobile-iframe="true">
+            <a id="aFB" class="fb-xfbml-parse-ignore" target="_blank"
+               href="">Condividi</a>
+        </div>
+
+    </div>
+    <div id="avatar" style="left: -63px;top:-50px;">
         <img style="height:40px; width:40px;" src="https://www.alpaloo.com/User/Photo/6617.png" class="img-responsive img-circle">
         <div id="avatarName" style="font-weight:bold;"><strong>MARIO ROSSI</strong></div>
     </div>
