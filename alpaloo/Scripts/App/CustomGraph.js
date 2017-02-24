@@ -138,30 +138,40 @@ function loadGrafico() {
         },
         plotOptions: {
             series: {
-                cursor: 'pointer',
+                allowPointSelect: true,
+                marker: {
+                    enabled:true,
+                    states: {
+                        select: {
+                            enabled:true,
+                            fillColor: 'red',
+                            radius: 6
+                        }
+                    }
+                },
                 point: {
                     events: {
                         click: function (e) {
                             doMoveAtPoint(this.index);
                         }
                     }
-                },
-                marker: {
-                    lineWidth: 1
                 }
             }
         },
         chart: {
             color: '',
             //width:1263,
+            renderTo: $("#myChart")[0],
             type: 'line',
             plotBorderColor: '#606063'
         },
         series: [{}]
     };
 
-    options.series[0].data = seriesArr;    
-    $("#myChart").highcharts(options);
+    options.series[0].data = seriesArr;
+    myChart = new Highcharts.Chart(options);
+    myChart.series[0].points[0].select();
+    
     $(".highcharts-button").hide();
 
 }

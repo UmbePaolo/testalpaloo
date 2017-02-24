@@ -42,9 +42,10 @@ function buttonPlayPress() {
 
 function buttonStopPress() {
     state = 'stop';
-    indiceWayPoint = 0;
     clearInterval(timer);
     var button = $("#button_play i");
     button.attr('class', "fa fa-play");
+    doMoveAtPoint(0);
+    myChart.series[0].points[0].select();
     console.log("button stop invoked.");
 }

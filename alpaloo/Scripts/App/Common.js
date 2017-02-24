@@ -5,8 +5,9 @@ var hackUsername = 'mia@tua.it';
 var hackPassword = 'nessuna';
 // ********* fine hack ********
 //Fine variabili modificabili
+var myChart;
 var data;
-var indiceWayPoint = 0;
+var indiceWayPoint;
 var timer; //timer per il movimento del WayPoint
 var avatarReady = false;
 var avatar; //la div dell'avatar
@@ -16,8 +17,12 @@ var state = 'stop';
 var mioBody;
 $(document).ready(function () {
     mioBody = $("body");
+    indiceWayPoint = new WayPointIndex();
     SetToken();
     avatar = $("#avatar");
+    jQuery(document).on('click', '#divFB', function (e) {
+        ShareFB();
+    });
 });
 var qs = (function (a) {
     if (a == "")
@@ -33,7 +38,13 @@ var qs = (function (a) {
     return b;
 })(window.location.search.substr(1).split('&'));
 function setData(d) {
+    if (!d) {
+        return;
+    }
     data = d;
+    if (data.liftsTaken.length < 1) {
+        return;
+    }
     data.liftsTaken.sort(function (lt1, lt2) {
         if (lt1.liftTime < lt2.liftTime)
             return -1;
@@ -52,11 +63,24 @@ function LiftsTakenEquals(lt1, lt2) {
 }
 function loadImage() {
     var img = document.createElement("img");
-    img.src = 'img/Courmayeur.png';
+    if (img) {
+        switch (data.resortName) {
+            case 'Courmayeur':
+                img.src = 'img/Courmayeur.png';
+                break;
+            case 'Monterosa':
+                img.src = 'img/Monterosa.png';
+            case 'la thuile':
+                img.src = 'img/LaThuile.png';
+                break;
+            default:
+                img.src = 'img/Courmayeur.png';
+        }
+    }
     img.onload = function () {
         var canvas = document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
-        var ratio = img.width / $(window).innerWidth();
+        var ratio = $(window).innerWidth() / img.width;
         canvas.height = img.height * ratio;
         canvas.width = $(window).innerWidth();
         var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.width, canvas.height);
@@ -93,4 +117,23 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
         height: rtnHeight
     };
 }
+var WayPointIndex = (function () {
+    function WayPointIndex() {
+        this._index = 0;
+    }
+    Object.defineProperty(WayPointIndex.prototype, "Index", {
+        get: function () {
+            return this._index;
+        },
+        set: function (newIndex) {
+            this._index = newIndex;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WayPointIndex.prototype.increaseIndex = function () {
+        this._index++;
+    };
+    return WayPointIndex;
+})();
 //# sourceMappingURL=Common.js.map

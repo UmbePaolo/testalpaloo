@@ -3,6 +3,7 @@
 function prepareAvatar() {
     avatar.hide();
     var map = <HTMLCanvasElement>document.getElementById("imgCanvas");
+    avatar.find('img').attr('src', data.avatar);
     //map.width = $(window).width();
   
     //Dati necessari: 
@@ -23,7 +24,7 @@ function prepareAvatar() {
 
     avatar.css("top", arrayDistanzaY[0] + 'px');
     avatar.css("left", arrayDistanzaX[0] + 'px');
-    indiceWayPoint++;
+    indiceWayPoint.increaseIndex();
     var an = $("#avatarName");
     an.text(data.userName + ' ' + data.userSurname);
     an.css('margin-left', -(avatar.width() / 2) + 20 + 'px');
@@ -32,18 +33,30 @@ function prepareAvatar() {
 }
 
 function doMove() {
-    if ((indiceWayPoint % 2) == 0) {
+    if ((indiceWayPoint.Index % 2) == 0) {
         avatar.addClass('notransition');
     }
-    avatar.css("top", arrayDistanzaY[indiceWayPoint] + 'px');
-    avatar.css("left", arrayDistanzaX[indiceWayPoint] + 'px');
+    updateAvatar();
+
+    myChart.series[0].points[indiceWayPoint.Index].select();
+    if (indiceWayPoint.Index === arrayDistanzaX.length - 1) {
+        buttonStopPress();
+    }
+    indiceWayPoint.increaseIndex();
+}
+
+function updateAvatar() {
+    avatar.css("top", arrayDistanzaY[indiceWayPoint.Index] + 'px');
+    avatar.css("left", arrayDistanzaX[indiceWayPoint.Index] + 'px');
     avatar[0].offsetHeight;
     avatar.removeClass('notransition');
-    indiceWayPoint++;
 }
 
 function doMoveAtPoint(indice: number) {
     clearInterval(timer);
-    indiceWayPoint = indice;
-    doMove();
+    indiceWayPoint.Index = indice;
+    updateAvatar();
+    if (state == 'play' || state == 'resume') {
+        timer = setInterval(doMove, 1100);
+    }
 }

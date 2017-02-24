@@ -12,16 +12,57 @@
 
 function ShareFB() {
     var canvas = <HTMLCanvasElement>document.getElementById('imgCanvas');
-    var data = canvas.toDataURL("image/png");
-    var blob:Blob;
+    var dataString = canvas.toDataURL("image/png");
+    var blob: Blob;
     try {
-        blob = dataURItoBlob(data);
+        blob = dataURItoBlob(dataString);
     } catch (e) {
         console.log(e);
     }
 
     $('#divFB').data('href', window.location.href);
-    $('#aFB').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURI(window.location.href));
+    //$('#aFB').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURI(window.location.href));
+
+    /*Save to server*/
+    var imageData = canvas.toDataURL("image/png");
+    imageData = imageData.replace('data:image/png;base64,', '');
+    var userName = data.userName + data.userSurname;
+    var l = (location.origin + location.pathname);
+    var p = l.substring(0, l.lastIndexOf('/') + 1);
+
+    //$.ajax({
+    //    type: "POST",
+    //    url: '/UploadImagePage.aspx/UploadImage',
+    //    data: {
+    //        action: 'raketrad_save_to_server',
+    //        imgBase64: imageData
+    //    }
+    //}).done(function (img_url) {
+    //    console.log(img_url);
+    //    $('body').append('<meta property="og:image" content="' + img_url + '" />');
+    //    FB.ui({
+    //        method: 'share',
+    //        href: window.location.href,
+    //        picture: img_url,
+    //    }, function (response) { });
+    //}); 
+
+    $.ajax({
+        type: 'POST',
+        url: 'UploadImageService.asmx/UploadImage',
+        data: JSON.stringify({ imageData: imageData, name: userName }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+    }).done(function (img_url) {
+        $('body').append('<meta property="og:image" content="' + p + img_url.d + '" />');
+        FB.ui({
+            method: 'share',
+            href: window.location.href,
+            picture: p + img_url.d,
+        }, function (response) { });
+    }); 
+
+
 
     //FB.getLoginStatus(function (response) {
     //    console.log(response);
@@ -38,7 +79,6 @@ function ShareFB() {
     //    }
     //});
 }
-
 
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();

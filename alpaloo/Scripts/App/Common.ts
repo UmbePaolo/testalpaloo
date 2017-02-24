@@ -8,9 +8,9 @@ var hackPassword = 'nessuna';
 
 //Fine variabili modificabili
 
-
+var myChart: any;
 var data: namespace.ISkiDay;
-var indiceWayPoint: number = 0;
+var indiceWayPoint: WayPointIndex;
 var timer: number; //timer per il movimento del WayPoint
 var avatarReady: boolean = false;
 var avatar: JQuery; //la div dell'avatar
@@ -22,8 +22,12 @@ var mioBody;
 declare function loadGrafico(): void;
 $(document).ready(function () {
     mioBody = $("body");
+    indiceWayPoint = new WayPointIndex();
     SetToken();
     avatar = $("#avatar");
+    jQuery(document).on('click', '#divFB', function (e) {
+        ShareFB();
+    });
 });
 
 var qs = (function (a) {
@@ -40,7 +44,14 @@ var qs = (function (a) {
 })(window.location.search.substr(1).split('&'));
 
 function setData(d) {
+    if (!d) {
+        return;
+    }
     data = d;
+    if (data.liftsTaken.length < 1) {
+        return;
+    }
+
     data.liftsTaken.sort(function (lt1, lt2) {
         if (lt1.liftTime < lt2.liftTime)
             return -1;
@@ -61,12 +72,26 @@ function LiftsTakenEquals(lt1: namespace.ILiftsTaken, lt2: namespace.ILiftsTaken
 
 function loadImage() {
     var img: HTMLImageElement = document.createElement("img");
-    img.src = 'img/Courmayeur.png';
+
+    if (img) {
+        switch (data.resortName) {
+            case 'Courmayeur':
+                img.src = 'img/Courmayeur.png';
+                break;
+            case 'Monterosa':
+                img.src = 'img/Monterosa.png';
+            case 'la thuile':
+                img.src = 'img/LaThuile.png';
+                break;
+            default:
+                img.src = 'img/Courmayeur.png';
+        }
+    }
 
     img.onload = function () {
         var canvas = <HTMLCanvasElement>document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
-        var ratio = img.width / $(window).innerWidth();
+        var ratio = $(window).innerWidth() / img.width;
         canvas.height = img.height * ratio;
         canvas.width = $(window).innerWidth();
 
@@ -95,7 +120,7 @@ function loadImage() {
     //}
 }
 
-function getPoint(val: number,hundredPercent: number) {
+function getPoint(val: number, hundredPercent: number) {
     return Math.floor((val / 100) * hundredPercent);
 }
 
@@ -107,4 +132,21 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
         width: rtnWidth,
         height: rtnHeight
     };
+}
+
+class WayPointIndex {
+    private _index: number;
+    constructor() { this._index = 0; }
+
+    get Index(): number {
+        return this._index;
+    }
+
+    set Index(newIndex: number) {
+        this._index = newIndex;
+    }
+
+    increaseIndex() {
+        this._index++;
+    }
 }
