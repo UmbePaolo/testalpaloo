@@ -68,6 +68,8 @@
     <Content Include="img\funicolare.png" />
     <Content Include="img\funivia.png" />
     <Content Include="img\LaThuile.png" />
+    <Content Include="img\Logo_alpaloo_blu.png" />
+    <Content Include="img\Logo_alpaloo_blu_small.png" />
     <Content Include="img\Monterosa.png" />
     <Content Include="img\seggiovia.png" />
     <Content Include="img\skilift.png" />

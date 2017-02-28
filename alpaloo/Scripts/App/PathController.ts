@@ -16,10 +16,10 @@ function prepareAvatar() {
     var altezzaMappaY = map.height;
 
     $.each(data.liftsTaken, function (key, d) {
-        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) - 20);
-        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + 30);
-        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) - 20);
-        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 30);
+        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + 10);
+        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 55);
+        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) + 10);
+        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + 55);
     });
 
     avatar.css("top", arrayDistanzaY[0] + 'px');

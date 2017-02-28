@@ -49,7 +49,9 @@ function loadGrafico() {
 
         var punto = {
             x: dt + 300000, //metto attualmente un viaggio di 5 minuti
-            y: d.arrAlt
+            y: d.arrAlt,
+            custImg: 'img/' + d.icon.replace("svg", "png"),
+            custResort: d.liftName
         };
 
         seriesArr.push(punto);
