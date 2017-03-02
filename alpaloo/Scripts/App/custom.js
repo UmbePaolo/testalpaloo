@@ -1,17 +1,25 @@
+/// <reference path="Common.ts" />
+/// <reference path="SkiDay.ts" />
 var token;
 var hdnUserId;
+// ***************** Funzioni per le api
 function SetToken() {
+    // url
     var uri = 'api/auth/login';
+    // Data obj
     var processObj = null;
+    // Send
     SendAjaxRequest(uri, processObj, setHeaderForLogin, "GetMessageLogin");
 }
 var setHeaderForLogin = function setHeaderForLogin(xhr) {
     xhr.setRequestHeader('Authorization', 'Basic "' + Base64.encode(hackUsername + ':' + hackPassword) + '"');
+    //xhr.setRequestHeader('Access-Control-Allow-Origin','http://wsapi.alpaloo.com')
 };
 var setCustomHeaderToken = function setCustomHeaderToken(xhr) {
     xhr.setRequestHeader('Authorization', 'JWT ' + token);
 };
 function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
+    // Send an AJAX request
     $.ajax({
         url: domain + uri,
         type: 'POST',
@@ -19,7 +27,9 @@ function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
         data: processObj,
         processData: false,
         success: function (data) {
+            // Get controller
             var ctrl = new ControllerRequest();
+            // Call function
             ctrl[methodName](data);
         },
         error: function (a, b, c) { },
@@ -28,36 +38,47 @@ function SendAjaxRequest(uri, processObj, beforeSendObj, methodName) {
 }
 var ControllerRequest = function () {
     this.GetMessageLogin = function (x) {
+        // Set message
         token = x.token;
         hdnUserId = x.UserID;
         SetData();
     },
         this.GetMessage = function (x) {
+            //load data
             setData(x);
         };
 };
+// ***************** Fine funzioni per le api
 function SetData() {
+    // url
     var uri = 'api/skiday';
+    //querystring = ?uid=<nnnnn>&date=<dd/mm/yyyy>&loc=<>
     var dateParts = qs["date"].split("/");
     var dateObject = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+    // Data obj
     var processObj = {
         "UserId": qs["uid"],
         "userRequestId": qs["uid"],
         "Date": dateObject
     };
     var obj = JSON.stringify(processObj);
+    // Send
     SendAjaxRequest(uri, obj, setCustomHeaderToken, "GetMessage");
 }
 //# sourceMappingURL=ApiCaller.js.map
+//Variabili modificabili
+// ********* hack ********
 var domain = "http://testapib2c.alpaloo.com/";
 var hackUsername = 'mia@tua.it';
 var hackPassword = 'nessuna';
+// ********* fine hack ********
+//Fine variabili modificabili
 var myChart;
 var data;
 var indiceWayPoint;
-var timer;
+var timer; //timer per il movimento del WayPoint
 var avatarReady = false;
-var avatar;
+var avatar; //la div dell'avatar
 var arrayDistanzaX = [];
 var arrayDistanzaY = [];
 var state = 'stop';
@@ -105,6 +126,8 @@ function setData(d) {
     loadImage();
 }
 function LiftsTakenEquals(lt1, lt2) {
+    //return lt1.liftStartTop === lt2.liftStartTop && lt1.liftStartLeft === lt2.liftStartLeft
+    //    && lt1.liftEndTop === lt2.liftEndTop && lt1.liftEndLeft === lt2.liftEndLeft;
     if (!lt1 || !lt2)
         return false;
     return lt1.liftName === lt2.liftName;
@@ -118,7 +141,7 @@ function loadImage() {
                 break;
             case 'Monterosa':
                 img.src = 'img/Monterosa.png';
-            case 'la thuile':
+            case 'La Thuile':
                 img.src = 'img/LaThuile.png';
                 break;
             default:
@@ -132,11 +155,26 @@ function loadImage() {
         canvas.height = img.height * ratio;
         canvas.width = $(window).innerWidth();
         var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.width, canvas.height);
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
         drawLines(ctx);
         prepareAvatar();
+        //mioBody.show();
         loadGrafico();
     };
+    //var imgCanvas = $("#imgCanvas");
+    //if (imgCanvas) {
+    //    switch (data.resortName) {
+    //        case 'Courmayeur':
+    //            imgCanvas.css('background-image',  'url(img/Courmayeur.png)');
+    //            break;
+    //        case 'Monterosa':
+    //            imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
+    //            break;
+    //        default:
+    //            imgCanvas.css('background-image', 'url(img/Courmayeur.png)');
+    //    }
+    //}
 }
 function getPoint(val, hundredPercent) {
     return Math.floor((val / 100) * hundredPercent);
@@ -150,20 +188,25 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
         height: rtnHeight
     };
 }
-class WayPointIndex {
-    constructor() {
+var WayPointIndex = (function () {
+    function WayPointIndex() {
         this._index = 0;
     }
-    get Index() {
-        return this._index;
-    }
-    set Index(newIndex) {
-        this._index = newIndex;
-    }
-    increaseIndex() {
+    Object.defineProperty(WayPointIndex.prototype, "Index", {
+        get: function () {
+            return this._index;
+        },
+        set: function (newIndex) {
+            this._index = newIndex;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WayPointIndex.prototype.increaseIndex = function () {
         this._index++;
-    }
-}
+    };
+    return WayPointIndex;
+})();
 //# sourceMappingURL=Common.js.map
 function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
@@ -185,11 +228,29 @@ function ShareFB() {
         console.log(e);
     }
     $('#divFB').data('href', window.location.href);
+    //$('#aFB').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURI(window.location.href));
+    /*Save to server*/
     var imageData = canvas.toDataURL("image/png");
     imageData = imageData.replace('data:image/png;base64,', '');
     var userName = data.userName + data.userSurname;
-    var l = (location.origin + location.pathname);
-    var p = l.substring(0, l.lastIndexOf('/') + 1);
+    var l = (location.origin + '/');
+    //var p = l.substring(0, l.lastIndexOf('/') + 1);
+    //$.ajax({
+    //    type: "POST",
+    //    url: '/UploadImagePage.aspx/UploadImage',
+    //    data: {
+    //        action: 'raketrad_save_to_server',
+    //        imgBase64: imageData
+    //    }
+    //}).done(function (img_url) {
+    //    console.log(img_url);
+    //    $('body').append('<meta property="og:image" content="' + img_url + '" />');
+    //    FB.ui({
+    //        method: 'share',
+    //        href: window.location.href,
+    //        picture: img_url,
+    //    }, function (response) { });
+    //}); 
     $.ajax({
         type: 'POST',
         url: 'UploadImageService.asmx/UploadImage',
@@ -197,19 +258,34 @@ function ShareFB() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
     }).done(function (img_url) {
-        $('body').append('<meta property="og:image" content="' + p + img_url.d + '" />');
+        $('body').append('<meta property="og:image" content="' + l + img_url.d + '" />');
         FB.ui({
             method: 'share',
             href: window.location.href,
-            picture: p + img_url.d,
+            picture: l + img_url.d,
         }, function (response) { });
     });
+    //FB.getLoginStatus(function (response) {
+    //    console.log(response);
+    //    if (response.status === "connected") {
+    //        postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+    //    } else if (response.status === "not_authorized") {
+    //        FB.login(function (response) {
+    //            postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+    //        }, { scope: "publish_actions" });
+    //    } else {
+    //        FB.login(function (response) {
+    //            postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+    //        }, { scope: "publish_actions" });
+    //    }
+    //});
 }
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();
     fd.append("access_token", token);
     fd.append("source", imageData);
     fd.append("no_story", true);
+    // Upload image to facebook without story(post to feed)
     $.ajax({
         url: "https://graph.facebook.com/me/photos?access_token=" + token,
         type: "POST",
@@ -219,8 +295,11 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
         cache: false,
         success: function (data) {
             console.log("success: ", data);
+            // Get image source url
             FB.api("/" + data.id + "?fields=images", function (response) {
                 if (response && !response.error) {
+                    //console.log(response.images[0].source);
+                    // Create facebook post using image
                     FB.api("/me/feed", "POST", {
                         "message": "",
                         "picture": response.images[0].source,
@@ -232,6 +311,7 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
                         }
                     }, function (response) {
                         if (response && !response.error) {
+                            /* handle the result */
                             console.log("Posted story to facebook");
                             console.log(response);
                         }
@@ -243,28 +323,56 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
             console.log("error " + data + " Status " + shr.status);
         },
         complete: function (data) {
+            //console.log('Post to facebook Complete');
         }
     });
 }
 //# sourceMappingURL=FbScript.js.map
 var heatMap = ['#f8c9b9', '#f4a58b', '#f19374', '#ef815d', '#ea5d2e', '#e84e1b'];
+// Production steps of ECMA-262, Edition 5, 15.4.4.14
+// Reference: http://es5.github.io/#x15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement, fromIndex) {
         var k;
+        // 1. Let o be the result of calling ToObject passing
+        //    the this value as the argument.
         if (this == null) {
             throw new TypeError('"this" is null or not defined');
         }
         var o = Object(this);
+        // 2. Let lenValue be the result of calling the Get
+        //    internal method of o with the argument "length".
+        // 3. Let len be ToUint32(lenValue).
         var len = o.length >>> 0;
+        // 4. If len is 0, return -1.
         if (len === 0) {
             return -1;
         }
+        // 5. If argument fromIndex was passed let n be
+        //    ToInteger(fromIndex); else let n be 0.
         var n = fromIndex | 0;
+        // 6. If n >= len, return -1.
         if (n >= len) {
             return -1;
         }
+        // 7. If n >= 0, then Let k be n.
+        // 8. Else, n<0, Let k be len - abs(n).
+        //    If k is less than 0, then let k be 0.
         k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+        // 9. Repeat, while k < len
         while (k < len) {
+            // a. Let Pk be ToString(k).
+            //   This is implicit for LHS operands of the in operator
+            // b. Let kPresent be the result of calling the
+            //    HasProperty internal method of o with argument Pk.
+            //   This step can be combined with c
+            // c. If kPresent is true, then
+            //    i.  Let elementK be the result of calling the Get
+            //        internal method of o with the argument ToString(k).
+            //   ii.  Let same be the result of applying the
+            //        Strict Equality Comparison Algorithm to
+            //        searchElement and elementK.
+            //  iii.  If same is true, return k.
             if (k in o && o[k] === searchElement) {
                 return k;
             }
@@ -345,10 +453,17 @@ function squash(arr) {
     return tmp;
 }
 //# sourceMappingURL=LineMaker.js.map
+/// <reference path="../typings/jquery/jquery.d.ts" />
 function prepareAvatar() {
     avatar.hide();
     var map = document.getElementById("imgCanvas");
     avatar.find('img').attr('src', data.avatar);
+    //map.width = $(window).width();
+    //Dati necessari: 
+    // 1) nello skiday:
+    // aggiungere coordinate Skir_Top,	Skir_Left per ogni passaggio attualmente restituito
+    //le coordinate devono però essere quelle esatte dei tornelli di partenza ed arrivo degli impianti
+    //___1___CALCOLO LE POSIZIONI IN PIXEL___ 
     var larghezzaMappaX = map.width;
     var altezzaMappaY = map.height;
     $.each(data.liftsTaken, function (key, d) {
@@ -392,6 +507,8 @@ function doMoveAtPoint(indice) {
     }
 }
 //# sourceMappingURL=PathController.js.map
+/// <reference path="Common.ts" />
+/// <reference path="pathcontroller.ts" />
 function buttonBackPress() {
     console.log("button back invoked.");
 }
@@ -409,6 +526,7 @@ function buttonPlayPress() {
         state = 'play';
         var button = $("#button_play i");
         button.attr('class', "fa fa-pause");
+        //___3___FACCIO PARTIRE IL PERCORSO___
         doMove;
         timer = setInterval(doMove, 1100);
     }

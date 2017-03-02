@@ -52,9 +52,9 @@ function setData(d) {
             return 1;
         return 0;
     });
-    $('meta[name=og\\:title]').attr('content', 'La mia giornata sci a ' + data.resortName);
+    $('meta[property=og\\:title]').attr('content', 'La mia giornata sci a ' + data.resortName);
     var desc = 'Metri risaliti: ' + data.mtTotRisaliti + ' – Ore di attività: ' + data.hTotAttivita + ' – Impianti presi: ' + data.liftsTaken.length;
-    $('meta[name=og\\:description]').attr('content', desc);
+    $('meta[property=og\\:description]').attr('content', desc);
     loadImage();
 }
 function LiftsTakenEquals(lt1, lt2) {
@@ -73,7 +73,7 @@ function loadImage() {
                 break;
             case 'Monterosa':
                 img.src = 'img/Monterosa.png';
-            case 'la thuile':
+            case 'La Thuile':
                 img.src = 'img/LaThuile.png';
                 break;
             default:

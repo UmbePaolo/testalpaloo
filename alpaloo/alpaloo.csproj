@@ -81,9 +81,25 @@
     <Content Include="img\skirama_lathuile.png" />
     <Content Include="img\tapis_roulant.png" />
     <Content Include="packages.config" />
+    <Content Include="Scripts\App\ApiCaller.js" />
+    <Content Include="Scripts\App\Common.js" />
+    <Content Include="Scripts\App\custom.js" />
+    <Content Include="Scripts\App\custom.min.js">
+      <DependentUpon>custom.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\App\CustomGraph.min.js">
+      <DependentUpon>CustomGraph.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\App\FbScript.js" />
+    <Content Include="Scripts\App\JavaScript.js" />
+    <Content Include="Scripts\App\LineMaker.js" />
+    <Content Include="Scripts\App\PathController.js" />
+    <Content Include="Scripts\App\PlayerController.js" />
+    <Content Include="Scripts\App\SkiDay.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="sample.json" />
+    <None Include="bundleconfig.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -149,7 +165,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
@@ -164,6 +180,21 @@
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

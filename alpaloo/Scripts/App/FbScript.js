@@ -1,4 +1,4 @@
-﻿function dataURItoBlob(dataURI) {
+function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
@@ -7,29 +7,24 @@
     }
     return new Blob([ab], { type: 'image/png' });
 }
-
-
-
 function ShareFB() {
-    var canvas = <HTMLCanvasElement>document.getElementById('imgCanvas');
+    var canvas = document.getElementById('imgCanvas');
     var dataString = canvas.toDataURL("image/png");
-    var blob: Blob;
+    var blob;
     try {
         blob = dataURItoBlob(dataString);
-    } catch (e) {
+    }
+    catch (e) {
         console.log(e);
     }
-
     $('#divFB').data('href', window.location.href);
     //$('#aFB').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURI(window.location.href));
-
     /*Save to server*/
     var imageData = canvas.toDataURL("image/png");
     imageData = imageData.replace('data:image/png;base64,', '');
     var userName = data.userName + data.userSurname;
-    var l = (location.origin +'/' );
+    var l = (location.origin + '/');
     //var p = l.substring(0, l.lastIndexOf('/') + 1);
-
     //$.ajax({
     //    type: "POST",
     //    url: '/UploadImagePage.aspx/UploadImage',
@@ -46,7 +41,6 @@ function ShareFB() {
     //        picture: img_url,
     //    }, function (response) { });
     //}); 
-
     $.ajax({
         type: 'POST',
         url: 'UploadImageService.asmx/UploadImage',
@@ -60,10 +54,7 @@ function ShareFB() {
             href: window.location.href,
             picture: l + img_url.d,
         }, function (response) { });
-    }); 
-
-
-
+    });
     //FB.getLoginStatus(function (response) {
     //    console.log(response);
     //    if (response.status === "connected") {
@@ -79,13 +70,11 @@ function ShareFB() {
     //    }
     //});
 }
-
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();
     fd.append("access_token", token);
     fd.append("source", imageData);
     fd.append("no_story", true);
-
     // Upload image to facebook without story(post to feed)
     $.ajax({
         url: "https://graph.facebook.com/me/photos?access_token=" + token,
@@ -96,39 +85,29 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
         cache: false,
         success: function (data) {
             console.log("success: ", data);
-
             // Get image source url
-            FB.api(
-                "/" + data.id + "?fields=images",
-                function (response) {
-                    if (response && !response.error) {
-                        //console.log(response.images[0].source);
-
-                        // Create facebook post using image
-                        FB.api(
-                            "/me/feed",
-                            "POST",
-                            {
-                                "message": "",
-                                "picture": response.images[0].source,
-                                "link": window.location.href,
-                                "name": 'Look at the cute panda!',
-                                "description": message,
-                                "privacy": {
-                                    value: 'SELF'
-                                }
-                            },
-                            function (response) {
-                                if (response && !response.error) {
-                                    /* handle the result */
-                                    console.log("Posted story to facebook");
-                                    console.log(response);
-                                }
-                            }
-                        );
-                    }
+            FB.api("/" + data.id + "?fields=images", function (response) {
+                if (response && !response.error) {
+                    //console.log(response.images[0].source);
+                    // Create facebook post using image
+                    FB.api("/me/feed", "POST", {
+                        "message": "",
+                        "picture": response.images[0].source,
+                        "link": window.location.href,
+                        "name": 'Look at the cute panda!',
+                        "description": message,
+                        "privacy": {
+                            value: 'SELF'
+                        }
+                    }, function (response) {
+                        if (response && !response.error) {
+                            /* handle the result */
+                            console.log("Posted story to facebook");
+                            console.log(response);
+                        }
+                    });
                 }
-            );
+            });
         },
         error: function (shr, status, data) {
             console.log("error " + data + " Status " + shr.status);
@@ -138,3 +117,4 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
         }
     });
 }
+//# sourceMappingURL=FbScript.js.map

@@ -1,0 +1,21 @@
+[
+  {
+    "outputFileName": "Scripts/App/CustomGraph.min.js",
+    "inputFiles": [
+      "Scripts/App/CustomGraph.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/App/custom.js",
+    "inputFiles": [
+      "Scripts/App/ApiCaller.js",
+      "Scripts/App/Common.js",
+      "Scripts/App/FbScript.js",
+      "Scripts/App/LineMaker.js",
+      "Scripts/App/PathController.js",
+      "Scripts/App/PlayerController.js",
+      "Scripts/App/SkiDay.js",
+      "Scripts/App/CustomGraph.js"
+    ]
+  }
+]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using System.Web.Services;
 
 namespace alpaloo
@@ -12,7 +13,8 @@ namespace alpaloo
         [WebMethod()]
         public string UploadImage(string imageData, string name)
         {
-            string contentPath = Server.MapPath(@"~\ImgTmp");
+            var appath = HttpContext.Current.Request.ApplicationPath;
+            string contentPath = Server.MapPath(Path.Combine(appath ,"ImgTmp"));
             if (!Directory.Exists(contentPath))
             {
                 Directory.CreateDirectory(contentPath);
@@ -31,7 +33,7 @@ namespace alpaloo
             }
             var di = new DirectoryInfo(fileNameWitPath);
 
-            return Path.Combine(di.Parent.Name, di.Name);
+            return Path.Combine(appath, di.Parent.Name, di.Name);
         }
     }
 }
