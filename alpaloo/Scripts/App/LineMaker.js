@@ -52,7 +52,6 @@ if (!Array.prototype.indexOf) {
     };
 }
 function drawLines(ctx) {
-    var canvas = document.getElementById('imgCanvas');
     var lts = [], nums = [];
     contaOccorrenze(lts, nums);
     var larghezzaMappaX = canvas.width;

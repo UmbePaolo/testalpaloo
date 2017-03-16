@@ -15,13 +15,14 @@ var arrayDistanzaX = [];
 var arrayDistanzaY = [];
 var state = 'stop';
 var mioBody;
+var canvas;
 $(document).ready(function () {
     mioBody = $("body");
     indiceWayPoint = new WayPointIndex();
     SetToken();
     avatar = $("#avatar");
     jQuery(document).on('click', '#divFB', function (e) {
-        ShareFB();
+        ShareFB2();
     });
 });
 var qs = (function (a) {
@@ -81,7 +82,7 @@ function loadImage() {
         }
     }
     img.onload = function () {
-        var canvas = document.getElementById("imgCanvas");
+        canvas = document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
         var ratio = $(window).innerWidth() / img.width;
         canvas.height = img.height * ratio;

@@ -18,6 +18,7 @@ var arrayDistanzaX: number[] = [];
 var arrayDistanzaY: number[] = [];
 var state = 'stop';
 var mioBody;
+var canvas: HTMLCanvasElement;
 
 declare function loadGrafico(): void;
 $(document).ready(function () {
@@ -26,7 +27,7 @@ $(document).ready(function () {
     SetToken();
     avatar = $("#avatar");
     jQuery(document).on('click', '#divFB', function (e) {
-        ShareFB();
+        ShareFB2();
     });
 });
 
@@ -93,7 +94,7 @@ function loadImage() {
     }
 
     img.onload = function () {
-        var canvas = <HTMLCanvasElement>document.getElementById("imgCanvas");
+        canvas = <HTMLCanvasElement>document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
         var ratio = $(window).innerWidth() / img.width;
         canvas.height = img.height * ratio;

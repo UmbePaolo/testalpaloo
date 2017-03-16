@@ -7,8 +7,100 @@ function dataURItoBlob(dataURI) {
     }
     return new Blob([ab], { type: 'image/png' });
 }
+function ShareFB2() {
+    var encoder = new GIFEncoder();
+    encoder.setRepeat(0); //0  -> loop forever
+    //1+ -> loop n times then stop
+    encoder.setDelay(1000); //go to next frame every n milliseconds
+    encoder.start();
+    //canvas.width = canvas.width / 3;
+    //canvas.height = canvas.height / 3;
+    var ctx = canvas.getContext("2d");
+    indiceWayPoint.Index = 0;
+    updateAvatar();
+    ctx.beginPath();
+    ctx.arc(arrayDistanzaX[indiceWayPoint.Index] + 20, arrayDistanzaY[indiceWayPoint.Index], 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+    encoder.addFrame(ctx);
+    indiceWayPoint.Index = 1;
+    updateAvatar();
+    ctx.beginPath();
+    ctx.arc(arrayDistanzaX[indiceWayPoint.Index] + 20, arrayDistanzaY[indiceWayPoint.Index], 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+    encoder.addFrame(ctx);
+    indiceWayPoint.Index = 2;
+    updateAvatar();
+    ctx.beginPath();
+    ctx.arc(arrayDistanzaX[indiceWayPoint.Index] + 20, arrayDistanzaY[indiceWayPoint.Index], 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+    encoder.addFrame(ctx);
+    indiceWayPoint.Index = 3;
+    updateAvatar();
+    ctx.beginPath();
+    ctx.arc(arrayDistanzaX[indiceWayPoint.Index] + 20, arrayDistanzaY[indiceWayPoint.Index], 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+    encoder.addFrame(ctx);
+    //$.each(data.liftsTaken, function (key, d) {
+    //    indiceWayPoint.increaseIndex();
+    //    updateAvatar();
+    //    encoder.addFrame(ctx);
+    //});
+    encoder.finish();
+    var binary_gif = encoder.stream().getData(); //notice this is different from the as3gif package!
+    var imageData = encode64(binary_gif);
+    console.log(imageData);
+    var l = (location.origin + '/');
+    var userName = data.userName + data.userSurname;
+    $.ajax({
+        type: 'POST',
+        url: 'UploadImageService.asmx/UploadImage',
+        data: JSON.stringify({ imageData: imageData, name: userName }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+    }).done(function (img_url) {
+        $('body').append('<meta property="og:image" content="' + l + img_url.d + '" />');
+        FB.ui({
+            method: 'share',
+            href: window.location.href,
+            picture: l + img_url.d,
+        }, function (response) { });
+    });
+}
+function encode64(input) {
+    var output = "", i = 0, l = input.length, key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    while (i < l) {
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+        if (isNaN(chr2))
+            enc3 = enc4 = 64;
+        else if (isNaN(chr3))
+            enc4 = 64;
+        output = output + key.charAt(enc1) + key.charAt(enc2) + key.charAt(enc3) + key.charAt(enc4);
+    }
+    return output;
+}
 function ShareFB() {
-    var canvas = document.getElementById('imgCanvas');
     var dataString = canvas.toDataURL("image/png");
     var blob;
     try {
@@ -25,22 +117,6 @@ function ShareFB() {
     var userName = data.userName + data.userSurname;
     var l = (location.origin + '/');
     //var p = l.substring(0, l.lastIndexOf('/') + 1);
-    //$.ajax({
-    //    type: "POST",
-    //    url: '/UploadImagePage.aspx/UploadImage',
-    //    data: {
-    //        action: 'raketrad_save_to_server',
-    //        imgBase64: imageData
-    //    }
-    //}).done(function (img_url) {
-    //    console.log(img_url);
-    //    $('body').append('<meta property="og:image" content="' + img_url + '" />');
-    //    FB.ui({
-    //        method: 'share',
-    //        href: window.location.href,
-    //        picture: img_url,
-    //    }, function (response) { });
-    //}); 
     $.ajax({
         type: 'POST',
         url: 'UploadImageService.asmx/UploadImage',
@@ -55,20 +131,6 @@ function ShareFB() {
             picture: l + img_url.d,
         }, function (response) { });
     });
-    //FB.getLoginStatus(function (response) {
-    //    console.log(response);
-    //    if (response.status === "connected") {
-    //        postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-    //    } else if (response.status === "not_authorized") {
-    //        FB.login(function (response) {
-    //            postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-    //        }, { scope: "publish_actions" });
-    //    } else {
-    //        FB.login(function (response) {
-    //            postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-    //        }, { scope: "publish_actions" });
-    //    }
-    //});
 }
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();

@@ -96,6 +96,9 @@
     <Content Include="Scripts\App\PathController.js" />
     <Content Include="Scripts\App\PlayerController.js" />
     <Content Include="Scripts\App\SkiDay.js" />
+    <Content Include="Scripts\Gif\GIFEncoder.js" />
+    <Content Include="Scripts\Gif\LZWEncoder.js" />
+    <Content Include="Scripts\Gif\NeuQuant.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="sample.json" />

@@ -1,7 +1,6 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 function prepareAvatar() {
     avatar.hide();
-    var map = document.getElementById("imgCanvas");
     avatar.find('img').attr('src', data.avatar);
     //map.width = $(window).width();
     //Dati necessari: 
@@ -9,8 +8,8 @@ function prepareAvatar() {
     // aggiungere coordinate Skir_Top,	Skir_Left per ogni passaggio attualmente restituito
     //le coordinate devono però essere quelle esatte dei tornelli di partenza ed arrivo degli impianti
     //___1___CALCOLO LE POSIZIONI IN PIXEL___ 
-    var larghezzaMappaX = map.width;
-    var altezzaMappaY = map.height;
+    var larghezzaMappaX = canvas.width;
+    var altezzaMappaY = canvas.height;
     $.each(data.liftsTaken, function (key, d) {
         arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + 10);
         arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 55);
@@ -34,6 +33,7 @@ function doMove() {
     myChart.series[0].points[indiceWayPoint.Index].select();
     if (indiceWayPoint.Index === arrayDistanzaX.length - 1) {
         buttonStopPress();
+        return;
     }
     indiceWayPoint.increaseIndex();
 }

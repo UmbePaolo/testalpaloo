@@ -63,7 +63,6 @@ if (!Array.prototype.indexOf) {
 }
 
 function drawLines(ctx) {
-    var canvas = <HTMLCanvasElement>document.getElementById('imgCanvas');
 
     var lts: namespace.ILiftsTaken[] = [], nums: number[] = [];
     contaOccorrenze(lts, nums);
