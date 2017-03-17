@@ -18,12 +18,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://www.alpaloo.com/css/global.css" />
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
-    <script type="text/javascript" src="https://www.alpaloo.com/js/highcharts.js"></script>
+    <!--<script type="text/javascript" src="https://www.alpaloo.com/js/highcharts.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/it.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
     <script type="text/javascript" src="https://wsapi.alpaloo.com/Scripts/Base64.js"></script>
     <!--<script src="Scripts/App/JavaScript.js"></script>-->
     <script src="Scripts/App/Common.js"></script>
     <script src="Scripts/App/ApiCaller.js"></script>
-    <script src="Scripts/App/CustomGraph.js"></script>
+    <script src="Scripts/App/CustomChart.js"></script>
     <script src="Scripts/App/LineMaker.js"></script>
     <script src="Scripts/App/PathController.js"></script>
     <script src="Scripts/App/PlayerController.js"></script>
@@ -81,6 +84,23 @@
             .btn:hover {
                 background-color: #fa9201;
             }
+
+        #chartjs-tooltip {
+            opacity: 0;
+            position: absolute;
+            background: #e84e1b;
+            color: white;
+            border-radius: 3px;
+            -webkit-transition: all .1s ease;
+            transition: all .1s ease;
+            pointer-events: none;
+            -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+        }
+
+            #chartjs-tooltip > img {
+                height: 1em;
+            }
     </style>
 
     <script>
@@ -135,10 +155,12 @@
 
     </div>
     <div id="avatar" style="left: -63px;top:-50px;">
-        <img style="height:40px; width:40px;" class="img-responsive img-circle">
+        <img class="img-responsive img-circle">
         <div id="avatarName" style="font-weight:bold;"><strong></strong></div>
     </div>
-    <div id="myChart" style="height:250px;padding:0;">
+    <canvas id="myChart" style="height:250px;padding:0;width:100%;"></canvas>
+    <div id="chartjs-tooltip">
+        <table></table>
     </div>
 </body>
 </html>

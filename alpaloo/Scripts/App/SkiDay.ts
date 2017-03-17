@@ -7,7 +7,7 @@
         difAlt: number;
         arrAlt: number;
         startAlt: number;
-        liftTime: Date;
+        liftTime: string;
         resortLogo: string;
         liftResort: string;
         icon: string;

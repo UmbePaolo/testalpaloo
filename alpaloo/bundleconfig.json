@@ -15,7 +15,7 @@
       "Scripts/App/PathController.js",
       "Scripts/App/PlayerController.js",
       "Scripts/App/SkiDay.js",
-      "Scripts/App/CustomGraph.js"
+      "scripts/app/customchart.js"
     ]
   }
 ]

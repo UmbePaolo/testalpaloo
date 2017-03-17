@@ -1,7 +1,14 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 function prepareAvatar() {
     avatar.hide();
-    avatar.find('img').attr('src', data.avatar);
+    var img = avatar.find('img');
+    img.attr('src', data.avatar);
+    if (window.innerWidth > 768) {
+        img.attr('style', 'height:40px; width:40px;');
+    }
+    else {
+        img.attr('style', 'height:20px; width:20px;');
+    }
     //map.width = $(window).width();
     //Dati necessari: 
     // 1) nello skiday:
@@ -10,15 +17,17 @@ function prepareAvatar() {
     //___1___CALCOLO LE POSIZIONI IN PIXEL___ 
     var larghezzaMappaX = canvas.width;
     var altezzaMappaY = canvas.height;
+    var xr = larghezzaMappaX / 126.6;
+    var yr = altezzaMappaY / 17.8;
     $.each(data.liftsTaken, function (key, d) {
-        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + 10);
-        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 55);
-        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) + 10);
-        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + 55);
+        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + xr);
+        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + yr);
+        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) + xr);
+        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + yr);
     });
     avatar.css("top", arrayDistanzaY[0] + 'px');
     avatar.css("left", arrayDistanzaX[0] + 'px');
-    indiceWayPoint.increaseIndex();
+    //indiceWayPoint.increaseIndex();
     var an = $("#avatarName");
     an.text(data.userName + ' ' + data.userSurname);
     an.css('margin-left', -(avatar.width() / 2) + 20 + 'px');
@@ -30,9 +39,9 @@ function doMove() {
         avatar.addClass('notransition');
     }
     updateAvatar();
-    myChart.series[0].points[indiceWayPoint.Index].select();
+    //myChart.series[0].points[indiceWayPoint.Index].select();
     if (indiceWayPoint.Index === arrayDistanzaX.length - 1) {
-        buttonStopPress();
+        buttonStopPress(true);
         return;
     }
     indiceWayPoint.increaseIndex();
@@ -42,10 +51,29 @@ function updateAvatar() {
     avatar.css("left", arrayDistanzaX[indiceWayPoint.Index] + 'px');
     avatar[0].offsetHeight;
     avatar.removeClass('notransition');
+    if ((indiceWayPoint.Index % 2) == 1) {
+        drawImage();
+        drawLines();
+    }
+    if (indiceWayPoint.Index == 0) {
+        drawImage();
+    }
 }
 function doMoveAtPoint(indice) {
     clearInterval(timer);
     indiceWayPoint.Index = indice;
+    updateAvatar();
+    if (state == 'play' || state == 'resume') {
+        timer = setInterval(doMove, 1100);
+    }
+}
+function doMoveAtLift(lift) {
+    clearInterval(timer);
+    var i = data.liftsTaken.indexOf(lift);
+    if (i == -1) {
+        return;
+    }
+    indiceWayPoint.Index = i;
     updateAvatar();
     if (state == 'play' || state == 'resume') {
         timer = setInterval(doMove, 1100);

@@ -34,13 +34,14 @@ function buttonPlayPress() {
     }
     console.log("button play pressed, play was " + state);
 }
-function buttonStopPress() {
+function buttonStopPress(x) {
     state = 'stop';
     clearInterval(timer);
     var button = $("#button_play i");
     button.attr('class', "fa fa-play");
-    doMoveAtPoint(0);
-    myChart.series[0].points[0].select();
+    if (!x) {
+        doMoveAtPoint(0);
+    }
     console.log("button stop invoked.");
 }
 //# sourceMappingURL=PlayerController.js.map

@@ -84,6 +84,8 @@ var arrayDistanzaY = [];
 var state = 'stop';
 var mioBody;
 var canvas;
+var imgSize;
+var imgResort;
 $(document).ready(function () {
     mioBody = $("body");
     indiceWayPoint = new WayPointIndex();
@@ -134,48 +136,40 @@ function LiftsTakenEquals(lt1, lt2) {
     return lt1.liftName === lt2.liftName;
 }
 function loadImage() {
-    var img = document.createElement("img");
-    if (img) {
+    imgResort = document.createElement("img");
+    if (imgResort) {
         switch (data.resortName) {
             case 'Courmayeur':
-                img.src = 'img/Courmayeur.png';
+                imgResort.src = 'img/Courmayeur.png';
                 break;
             case 'Monterosa':
-                img.src = 'img/Monterosa.png';
+                imgResort.src = 'img/Monterosa.png';
             case 'La Thuile':
-                img.src = 'img/LaThuile.png';
+                imgResort.src = 'img/LaThuile.png';
                 break;
             default:
-                img.src = 'img/Courmayeur.png';
+                imgResort.src = 'img/Courmayeur.png';
         }
     }
-    img.onload = function () {
+    imgResort.onload = function () {
         canvas = document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
-        var ratio = $(window).innerWidth() / img.width;
-        canvas.height = img.height * ratio;
+        var ratio = $(window).innerWidth() / imgResort.width;
+        canvas.height = imgResort.height * ratio;
         canvas.width = $(window).innerWidth();
-        var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.width, canvas.height);
+        imgSize = calculateAspectRatioFit(imgResort.width, imgResort.height, canvas.width, canvas.height);
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
-        drawLines(ctx);
+        //        ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
+        //drawLines(ctx);
+        drawImage();
         prepareAvatar();
         //mioBody.show();
-        loadGrafico();
+        loadGraph();
     };
-    //var imgCanvas = $("#imgCanvas");
-    //if (imgCanvas) {
-    //    switch (data.resortName) {
-    //        case 'Courmayeur':
-    //            imgCanvas.css('background-image',  'url(img/Courmayeur.png)');
-    //            break;
-    //        case 'Monterosa':
-    //            imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
-    //            break;
-    //        default:
-    //            imgCanvas.css('background-image', 'url(img/Courmayeur.png)');
-    //    }
-    //}
+}
+function drawImage() {
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(imgResort, 0, 0, imgSize.width, imgSize.height);
 }
 function getPoint(val, hundredPercent) {
     return Math.floor((val / 100) * hundredPercent);
@@ -204,7 +198,7 @@ var WayPointIndex = (function () {
         configurable: true
     });
     WayPointIndex.prototype.increaseIndex = function () {
-        this._index++;
+        this.Index = this._index + 1;
     };
     return WayPointIndex;
 })();
@@ -444,21 +438,25 @@ if (!Array.prototype.indexOf) {
         return -1;
     };
 }
-function drawLines(ctx) {
+function drawLines() {
+    var ctx = canvas.getContext("2d");
     var lts = [], nums = [];
     contaOccorrenze(lts, nums);
     var larghezzaMappaX = canvas.width;
     var altezzaMappaY = canvas.height;
-    for (var i = 0; i < lts.length; i++) {
-        var x2 = getPoint(lts[i].liftStartLeft, larghezzaMappaX) + 35;
-        var x1 = getPoint(lts[i].liftEndLeft, larghezzaMappaX) + 35;
-        var y2 = getPoint(lts[i].liftStartTop, altezzaMappaY) + 65;
-        var y1 = getPoint(lts[i].liftEndTop, altezzaMappaY) + 65;
+    var xr = larghezzaMappaX / 36.08;
+    var yr = altezzaMappaY / 15.06;
+    for (var i = 0; i < indiceWayPoint.Index + 1; i += 2) {
+        var j = Math.floor(i / 2);
+        var x2 = getPoint(data.liftsTaken[j].liftStartLeft, larghezzaMappaX) + xr;
+        var x1 = getPoint(data.liftsTaken[j].liftEndLeft, larghezzaMappaX) + xr;
+        var y2 = getPoint(data.liftsTaken[j].liftStartTop, altezzaMappaY) + yr;
+        var y1 = getPoint(data.liftsTaken[j].liftEndTop, altezzaMappaY) + yr;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.lineWidth = 4;
-        ctx.strokeStyle = getHeatMap(nums[i]);
+        ctx.strokeStyle = getHeatMap(nums[j]);
         ctx.stroke();
         ctx.beginPath();
         ctx.arc(x1, y1, 5, 0, 2 * Math.PI, false);
@@ -469,36 +467,79 @@ function drawLines(ctx) {
         ctx.fillStyle = '#506d7a';
         ctx.fill();
     }
+    //for (var i = 0; i < lts.length; i++) {
+    //    var x2 = getPoint(lts[i].liftStartLeft, larghezzaMappaX) + 35;
+    //    var x1 = getPoint(lts[i].liftEndLeft, larghezzaMappaX) + 35;
+    //    var y2 = getPoint(lts[i].liftStartTop, altezzaMappaY) + 65 ;
+    //    var y1 = getPoint(lts[i].liftEndTop, altezzaMappaY) + 65;
+    //    ctx.beginPath();
+    //    ctx.moveTo(x1, y1);
+    //    ctx.lineTo(x2, y2);
+    //    ctx.lineWidth = 4;
+    //    ctx.strokeStyle = getHeatMap(nums[i]);
+    //    ctx.stroke();
+    //    ctx.beginPath();
+    //    ctx.arc(x1, y1, 5, 0, 2 * Math.PI, false);
+    //    ctx.fillStyle = '#506d7a';
+    //    ctx.fill();
+    //    ctx.beginPath();
+    //    ctx.arc(x2, y2, 5, 0, 2 * Math.PI, false);
+    //    ctx.fillStyle = '#506d7a';
+    //    ctx.fill();
+    //}
 }
+//function contaOccorrenze(a, b) {
+//    var prev: namespace.ILiftsTaken;
+//    var arr = data.liftsTaken.slice();
+//    arr.sort(function (lt1, lt2) {
+//        if (lt1.liftName < lt2.liftName)
+//            return -1;
+//        if (lt1.liftName > lt2.liftName)
+//            return 1;
+//        return 0;
+//    });
+//    for (var i = 0; i < arr.length; i++) {
+//        if (!LiftsTakenEquals(arr[i], prev)) {
+//            a.push(arr[i]);
+//            b.push(0);
+//        } else {
+//            b[b.length - 1]++;
+//        }
+//        prev = arr[i];
+//    }
+//    var s = squash(b);
+//    if (s.length = 2) {
+//        var m = Math.max(s[0], s[1]);
+//        for (var i = 0; i < b.length; i++) {
+//            if (b[i] == m) {
+//                b[i] = heatMap.length - 1;
+//            }
+//        }
+//    }
+//}
 function contaOccorrenze(a, b) {
-    var prev;
-    var arr = data.liftsTaken.slice();
-    arr.sort(function (lt1, lt2) {
-        if (lt1.liftName < lt2.liftName)
-            return -1;
-        if (lt1.liftName > lt2.liftName)
-            return 1;
-        return 0;
-    });
-    for (var i = 0; i < arr.length; i++) {
-        if (!LiftsTakenEquals(arr[i], prev)) {
-            a.push(arr[i]);
-            b.push(0);
-        }
-        else {
-            b[b.length - 1]++;
-        }
-        prev = arr[i];
+    var i, j;
+    var lt = data.liftsTaken;
+    for (i = 0, j = lt.length; i < j; i++) {
+        a.push(lt[i]);
+        b.push(findOccurrences(lt.slice(0, i), lt[i]));
     }
-    var s = squash(b);
-    if (s.length = 2) {
-        var m = Math.max(s[0], s[1]);
-        for (var i = 0; i < b.length; i++) {
-            if (b[i] == m) {
-                b[i] = heatMap.length - 1;
-            }
-        }
+    //    var s = squash(b);
+    //if (s.length = 2) {
+    //    var m = Math.max(s[0], s[1]);
+    //    for (i = 0; i < b.length; i++) {
+    //        if (b[i] == m) {
+    //            b[i] = heatMap.length - 1;
+    //        }
+    //    }
+    //}
+}
+function findOccurrences(arr, val) {
+    var i, j, count = 1;
+    for (i = 0, j = arr.length; i < j; i++) {
+        (LiftsTakenEquals(arr[i], val)) && count++;
     }
+    return count;
 }
 function getHeatMap(i) {
     if (i > heatMap.length)
@@ -518,7 +559,14 @@ function squash(arr) {
 /// <reference path="../typings/jquery/jquery.d.ts" />
 function prepareAvatar() {
     avatar.hide();
-    avatar.find('img').attr('src', data.avatar);
+    var img = avatar.find('img');
+    img.attr('src', data.avatar);
+    if (window.innerWidth > 768) {
+        img.attr('style', 'height:40px; width:40px;');
+    }
+    else {
+        img.attr('style', 'height:20px; width:20px;');
+    }
     //map.width = $(window).width();
     //Dati necessari: 
     // 1) nello skiday:
@@ -527,15 +575,17 @@ function prepareAvatar() {
     //___1___CALCOLO LE POSIZIONI IN PIXEL___ 
     var larghezzaMappaX = canvas.width;
     var altezzaMappaY = canvas.height;
+    var xr = larghezzaMappaX / 126.6;
+    var yr = altezzaMappaY / 17.8;
     $.each(data.liftsTaken, function (key, d) {
-        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + 10);
-        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + 55);
-        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) + 10);
-        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + 55);
+        arrayDistanzaX.push(getPoint(d.liftEndLeft, larghezzaMappaX) + xr);
+        arrayDistanzaY.push(getPoint(d.liftEndTop, altezzaMappaY) + yr);
+        arrayDistanzaX.push(getPoint(d.liftStartLeft, larghezzaMappaX) + xr);
+        arrayDistanzaY.push(getPoint(d.liftStartTop, altezzaMappaY) + yr);
     });
     avatar.css("top", arrayDistanzaY[0] + 'px');
     avatar.css("left", arrayDistanzaX[0] + 'px');
-    indiceWayPoint.increaseIndex();
+    //indiceWayPoint.increaseIndex();
     var an = $("#avatarName");
     an.text(data.userName + ' ' + data.userSurname);
     an.css('margin-left', -(avatar.width() / 2) + 20 + 'px');
@@ -547,9 +597,9 @@ function doMove() {
         avatar.addClass('notransition');
     }
     updateAvatar();
-    myChart.series[0].points[indiceWayPoint.Index].select();
+    //myChart.series[0].points[indiceWayPoint.Index].select();
     if (indiceWayPoint.Index === arrayDistanzaX.length - 1) {
-        buttonStopPress();
+        buttonStopPress(true);
         return;
     }
     indiceWayPoint.increaseIndex();
@@ -559,10 +609,29 @@ function updateAvatar() {
     avatar.css("left", arrayDistanzaX[indiceWayPoint.Index] + 'px');
     avatar[0].offsetHeight;
     avatar.removeClass('notransition');
+    if ((indiceWayPoint.Index % 2) == 1) {
+        drawImage();
+        drawLines();
+    }
+    if (indiceWayPoint.Index == 0) {
+        drawImage();
+    }
 }
 function doMoveAtPoint(indice) {
     clearInterval(timer);
     indiceWayPoint.Index = indice;
+    updateAvatar();
+    if (state == 'play' || state == 'resume') {
+        timer = setInterval(doMove, 1100);
+    }
+}
+function doMoveAtLift(lift) {
+    clearInterval(timer);
+    var i = data.liftsTaken.indexOf(lift);
+    if (i == -1) {
+        return;
+    }
+    indiceWayPoint.Index = i;
     updateAvatar();
     if (state == 'play' || state == 'resume') {
         timer = setInterval(doMove, 1100);
@@ -605,193 +674,307 @@ function buttonPlayPress() {
     }
     console.log("button play pressed, play was " + state);
 }
-function buttonStopPress() {
+function buttonStopPress(x) {
     state = 'stop';
     clearInterval(timer);
     var button = $("#button_play i");
     button.attr('class', "fa fa-play");
-    doMoveAtPoint(0);
-    myChart.series[0].points[0].select();
+    if (!x) {
+        doMoveAtPoint(0);
+    }
     console.log("button stop invoked.");
 }
 //# sourceMappingURL=PlayerController.js.map
 //# sourceMappingURL=SkiDay.js.map
-/// <reference path="Common.ts" />
-/// <reference path="highcharts.js"/>
-
-
-function loadGrafico() {
-    var seriesArr = [];
-
-    var highchartsOptions = Highcharts.setOptions({
-        lang:
-            {
-                loading: 'Sto caricando...',
-                months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
-                weekdays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
-                shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-                exportButtonTitle: "Esporta",
-                printButtonTitle: "Importa",
-                rangeSelectorFrom: "Da",
-                rangeSelectorTo: "A",
-                rangeSelectorZoom: "Periodo",
-                downloadPNG: 'Download immagine PNG',
-                downloadJPEG: 'Download immagine JPEG',
-                downloadPDF: 'Download documento PDF',
-                downloadSVG: 'Download immagine SVG',
-                printChart: 'Stampa grafico',
-                thousandsSep: ".",
-                decimalPoint: ','
-            }
-    });
-
-    $.each(data.liftsTaken, function (key, d) {
+var Chart;
+var myLineChart;
+function loadGraph() {
+    var chartQuoteData = [];
+    var chartLiftData = [];
+    var chartDiffData = [];
+    var chartLabels = [];
+    var chartLiftLabels = [];
+    var chartLiftDisliv = [];
+    var chartLiftSeconds = [];
+    var chartLiftNames = [];
+    var chartLifts = [];
+    var chartOverrided = [];
+    function getTime(arrAlt, date) {
+        var minutes = arrAlt / 53;
+        var t = moment(date).add(minutes, 'minutes');
+        return t;
+    }
+    var startOfDay = moment(data.liftsTaken[0].liftTime).startOf('day');
+    $.each(data.liftsTaken, function (key, lift) {
         //var series = { name: data.userSurname, data: [], color: '#e84e1b' };
-
         //series.data.push(new Date(d.liftTime), d.arrAlt);
         //seriesArr.push(d.arrAlt);
-        var t = new Date(d.liftTime);
-        var dt = Date.UTC(t.getFullYear(), t.getMonth(), t.getDay(), t.getHours(), t.getMinutes(), t.getSeconds());
-
-        var punto = {
-            x: dt,
-            y: d.arrAlt - d.difAlt,
-            custImg: 'img/' + d.icon.replace("svg", "png"),
-            custResort: d.liftName
-            //,marker: {
-            //    symbol: 'url(img/' + d.icon.replace("svg", "png") + ')'
-            //}
-        };
-
-        seriesArr.push(punto);
-
-        var punto = {
-            x: dt + 300000, //metto attualmente un viaggio di 5 minuti
-            y: d.arrAlt,
-            custImg: 'img/' + d.icon.replace("svg", "png"),
-            custResort: d.liftName
-        };
-
-        seriesArr.push(punto);
+        //var t = new Date(d.liftTime);
+        //var dt = Date.UTC(t.getFullYear(), t.getMonth(), t.getDay(), t.getHours(), t.getMinutes(), t.getSeconds());
+        //var punto = {
+        //    x: dt,
+        //    y: d.arrAlt - d.difAlt,
+        //    custImg: 'img/' + d.icon.replace("svg", "png"),
+        //    custResort: d.liftName
+        //    //,marker: {
+        //    //    symbol: 'url(img/' + d.icon.replace("svg", "png") + ')'
+        //    //}
+        //};
+        //seriesArr1.push(punto);
+        //var punto = {
+        //    x: dt + 300000, //metto attualmente un viaggio di 5 minuti
+        //    y: d.arrAlt,
+        //    custImg: 'img/' + d.icon.replace("svg", "png"),
+        //    custResort: d.liftName
+        //};
+        //seriesArr2.push(punto);
+        chartQuoteData.push(lift.arrAlt);
+        chartDiffData.push(lift.difAlt);
+        chartLabels.push(lift.liftTime);
+        chartLiftData.push(lift.startAlt);
+        chartLiftData.push(lift.arrAlt);
+        chartLiftData.push(NaN);
+        chartLiftLabels.push(moment(lift.liftTime).format('H:mm'));
+        chartLiftLabels.push('');
+        chartLiftLabels.push('');
+        chartLifts.push(lift);
+        chartLifts.push(lift);
+        chartLifts.push(lift);
+        chartLiftNames.push(lift.liftName);
+        chartLiftNames.push(lift.liftName);
+        chartLiftNames.push(lift.liftName);
+        chartLiftSeconds.push(Math.abs(startOfDay.diff(lift.liftTime, 'seconds')));
+        chartLiftSeconds.push(Math.abs(startOfDay.diff(getTime(lift.difAlt, lift.liftTime), 'seconds')));
     });
-
-    var options = {
-        colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
-                 '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
-        title: {
-            text: ''
+    var dislivChartOptions = {
+        responsive: false,
+        spanGaps: true,
+        hover: {
+            animationDuration: 0
         },
+        elements: {
+            line: {
+                borderWidth: 2,
+                tension: 0.4,
+                borderColor: 'rgba(232, 78, 27, 0.43)',
+                backgroundColor: '#e84e1b',
+                fill: false
+            },
+            point: {
+                pointBorderColor: '#506d7a',
+                pointBackgroundColor: '#e84e1b',
+                radius: 5
+            }
+        },
+        scales: {
+            yAxes: [
+                {
+                    id: 'y-axis-1',
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: false,
+                        userCallback: function (meters) {
+                            return meters + 'mt';
+                        }
+                    }
+                }
+            ],
+            xAxes: [
+                {
+                    id: 'x-axis-1',
+                    display: true,
+                    position: 'bottom'
+                }
+            ]
+        }
+    };
+    var liftChartOptions = {
+        responsive: false,
         legend: {
-            enabled: false
+            display: false
         },
-        tooltip: {
-            useHTML: true,
-            formatter: function () {
-                var custImg = this.point.custImg;
-                var custResort = this.point.custResort;
-                var dato = '';// '<b>' + new Date(this.point.category).toTimeString().split(' ')[0] + '</b><br/>' + this.point.y + ' mt';
-                if (custImg) {
-                    dato = '<img src="' + custImg + '" title="" alt="" border="0">' + dato;
-                }
-                if (custResort) {
-                    dato = dato + '<b>' + custResort + '</b><br/>';
-                }
-                return '<div style="width:100px; height:50px;">' + dato + this.point.y + ' mt</div>';
-            },
-            backgroundColor: '#e84e1b'
+        hover: {
+            animationDuration: 0
         },
-        //tooltip: {
-        //    //headerFormat: '<b>{point.key}</b><br/>',
-        //    //pointFormat: '{point.y} mt',
-        //    seHTML: true,
-        //    formatter: function () {
-        //        var cust = this.point.cust;
-        //        if (cust) {
-        //            return '<img src="' + cust + '" />' + '<b>' + this.point.y + '</b>';
-        //        }
-        //    }
-        //},
-        xAxis: {
-            gridLineColor: '#707073',
-            labels: {
-                style: {
-                    color: '#E0E0E3'
-                }
-            },
-            lineColor: '#707073',
-            minorGridLineColor: '#505053',
-            tickColor: '#707073',
-            title: {
-                style: {
-                    color: '#A0A0A3'
-
-                }
-            },
-            type: 'datetime',
-            dateTimeLabelFormats: {
-                minute: '%H:%M:%S'
+        animation: {
+            duration: 1,
+            onComplete: function () {
+                var chartInstance = this.chart, ctx = chartInstance.ctx;
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontColor);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                //this.data.datasets.forEach(function (dataset, i) {
+                //    var meta = chartInstance.controller.getDatasetMeta(i);
+                //    meta.data.forEach(function (bar, index) {
+                //        var dato = chartLiftNames[index]
+                //        //if (dato != '') {
+                //        //    ctx.fillText(dato, bar._model.x, bar._model.y - 20);
+                //        //}
+                //    });
+                //});
             }
         },
-        yAxis: {
-            gridLineColor: '#707073',
-            labels: {
-                style: {
-                    color: '#E0E0E3'
-                }
+        elements: {
+            line: {
+                borderWidth: 4,
+                tension: 0.0,
+                borderColor: '#e84e1b',
+                backgroundColor: '#e84e1b',
+                fill: false
             },
-            lineColor: '#707073',
-            minorGridLineColor: '#505053',
-            tickColor: '#707073',
-            tickWidth: 1,
-            title: {
-                text: '',
-                style: {
-                    color: '#A0A0A3'
-                }
-            }, stackLabels: {
-                enabled: true,
-                style: {
-                    fontWeight: 'bold',
-                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                }
+            point: {
+                pointBorderColor: '#506d7a',
+                radius: 15
             }
         },
-        plotOptions: {
-            series: {
-                allowPointSelect: true,
-                marker: {
-                    enabled:true,
-                    states: {
-                        select: {
-                            enabled:true,
-                            fillColor: 'red',
-                            radius: 6
+        tooltips: {
+            enabled: false,
+            custom: function (tooltip) {
+                // Tooltip Element
+                var tooltipEl = document.getElementById('chartjs-tooltip');
+                // Hide if no tooltip
+                if (tooltip.opacity === 0) {
+                    tooltipEl.style.opacity = '0';
+                    return;
+                }
+                // Set caret Position
+                tooltipEl.classList.remove('above', 'below', 'no-transform');
+                if (tooltip.yAlign) {
+                    tooltipEl.classList.add(tooltip.yAlign);
+                }
+                else {
+                    tooltipEl.classList.add('no-transform');
+                }
+                function getBody(bodyItem) {
+                    return bodyItem.lines;
+                }
+                var indice = tooltip.dataPoints[0].index;
+                var lift = chartLifts[indice];
+                // Set Text
+                if (tooltip.body) {
+                    var liftName = chartLiftNames[indice];
+                    var d = chartLiftData[indice];
+                    var i = lift.icon;
+                    var custImg = '';
+                    if (i) {
+                        custImg = 'img/' + i.replace("svg", "png");
+                    }
+                    var titleLines = tooltip.title || [];
+                    var bodyLines = tooltip.body.map(getBody);
+                    var innerHtml = '<tr><td rowspan="2">' + '<img src="' + custImg + '" title="" alt="" border="0">' + '</td>';
+                    innerHtml += '<th>' + liftName + '</th></tr>';
+                    bodyLines.forEach(function (body, i) {
+                        var colors = tooltip.labelColors[i];
+                        var style = 'background:' + colors.backgroundColor;
+                        style += '; border-color:' + colors.borderColor;
+                        style += '; border-width: 2px';
+                        var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
+                        innerHtml += '<tr><td>' + span + d + ' mt</td></tr>';
+                    });
+                    var tableRoot = tooltipEl.querySelector('table');
+                    tableRoot.innerHTML = innerHtml;
+                }
+                var position = this._chart.canvas; //.getBoundingClientRect();
+                // Display, position, and set styles for font
+                tooltipEl.style.opacity = '1';
+                tooltipEl.style.left = position.offsetLeft + tooltip.caretX + 'px';
+                tooltipEl.style.top = position.offsetTop + tooltip.caretY + 'px';
+                //tooltipEl.style.left = tooltip.chart.canvas.offsetLeft + tooltip.x + 'px';
+                //tooltipEl.style.top = tooltip.chart.canvas.offsetTop + tooltip.y + 'px';
+                tooltipEl.style.fontFamily = tooltip._fontFamily;
+                tooltipEl.style.fontSize = tooltip.fontSize;
+                tooltipEl.style.fontStyle = tooltip._fontStyle;
+                tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+                doMoveAtPoint(Math.round(indice * 2 / 3));
+            }
+        },
+        scales: {
+            yAxes: [
+                {
+                    id: 'y-axis-1',
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    gridLines: {
+                        display: true
+                    },
+                    ticks: {
+                        beginAtZero: false,
+                        userCallback: function (meters, index) {
+                            return meters + 'mt';
                         }
                     }
                 },
-                point: {
-                    events: {
-                        click: function (e) {
-                            doMoveAtPoint(this.index);
+                {
+                    id: 'y-axis-1',
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    gridLines: {
+                        display: true
+                    },
+                    ticks: {
+                        beginAtZero: false,
+                        userCallback: function (meters, index) {
+                            return meters + 'mt';
                         }
                     }
                 }
-            }
-        },
-        chart: {
-            color: '',
-            //width:1263,
-            renderTo: $("#myChart")[0],
-            type: 'line',
-            plotBorderColor: '#606063'
-        },
-        series: [{}]
+            ],
+            xAxes: [
+                {
+                    id: 'x-axis-1',
+                    display: true,
+                    position: 'bottom'
+                }
+            ]
+        }
     };
-
-    options.series[0].data = seriesArr;
-    myChart = new Highcharts.Chart(options);
-    myChart.series[0].points[0].select();
-    
-    $(".highcharts-button").hide();
-
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var chartData = {
+        labels: chartLiftLabels,
+        datasets: [
+            {
+                data: chartLiftData,
+                borderWidth: 0,
+                type: 'line',
+                spanGaps: false,
+                beginAtZero: false,
+                pointRadius: 5,
+                pointHoverRadius: 5,
+                pointHitRadius: 5,
+                pointBackgroundColor: '#506d7a'
+            },
+            {
+                data: chartLiftData,
+                borderWidth: 10,
+                type: 'line',
+                borderDash: [6, 3],
+                borderColor: '#e84e1b',
+                pointBorderWidth: 1,
+                radius: 0,
+                beginAtZero: false
+            },
+            {
+                data: chartLiftData,
+                borderWidth: 0,
+                borderColor: 'rgba(80, 109, 122, 0.41)',
+                type: 'line',
+                spanGaps: true,
+                radius: 0,
+                beginAtZero: false
+            }
+        ]
+    };
+    myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: liftChartOptions
+    });
 }
+//# sourceMappingURL=CustomChart.js.map

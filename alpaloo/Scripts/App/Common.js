@@ -16,6 +16,8 @@ var arrayDistanzaY = [];
 var state = 'stop';
 var mioBody;
 var canvas;
+var imgSize;
+var imgResort;
 $(document).ready(function () {
     mioBody = $("body");
     indiceWayPoint = new WayPointIndex();
@@ -66,48 +68,40 @@ function LiftsTakenEquals(lt1, lt2) {
     return lt1.liftName === lt2.liftName;
 }
 function loadImage() {
-    var img = document.createElement("img");
-    if (img) {
+    imgResort = document.createElement("img");
+    if (imgResort) {
         switch (data.resortName) {
             case 'Courmayeur':
-                img.src = 'img/Courmayeur.png';
+                imgResort.src = 'img/Courmayeur.png';
                 break;
             case 'Monterosa':
-                img.src = 'img/Monterosa.png';
+                imgResort.src = 'img/Monterosa.png';
             case 'La Thuile':
-                img.src = 'img/LaThuile.png';
+                imgResort.src = 'img/LaThuile.png';
                 break;
             default:
-                img.src = 'img/Courmayeur.png';
+                imgResort.src = 'img/Courmayeur.png';
         }
     }
-    img.onload = function () {
+    imgResort.onload = function () {
         canvas = document.getElementById("imgCanvas");
         var ctx = canvas.getContext("2d");
-        var ratio = $(window).innerWidth() / img.width;
-        canvas.height = img.height * ratio;
+        var ratio = $(window).innerWidth() / imgResort.width;
+        canvas.height = imgResort.height * ratio;
         canvas.width = $(window).innerWidth();
-        var imgSize = calculateAspectRatioFit(img.width, img.height, canvas.width, canvas.height);
+        imgSize = calculateAspectRatioFit(imgResort.width, imgResort.height, canvas.width, canvas.height);
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
-        drawLines(ctx);
+        //        ctx.drawImage(img, 0, 0, imgSize.width, imgSize.height);
+        //drawLines(ctx);
+        drawImage();
         prepareAvatar();
         //mioBody.show();
-        loadGrafico();
+        loadGraph();
     };
-    //var imgCanvas = $("#imgCanvas");
-    //if (imgCanvas) {
-    //    switch (data.resortName) {
-    //        case 'Courmayeur':
-    //            imgCanvas.css('background-image',  'url(img/Courmayeur.png)');
-    //            break;
-    //        case 'Monterosa':
-    //            imgCanvas.css('background-image', 'url(img/skirama-monterosa.png)');
-    //            break;
-    //        default:
-    //            imgCanvas.css('background-image', 'url(img/Courmayeur.png)');
-    //    }
-    //}
+}
+function drawImage() {
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(imgResort, 0, 0, imgSize.width, imgSize.height);
 }
 function getPoint(val, hundredPercent) {
     return Math.floor((val / 100) * hundredPercent);
@@ -136,7 +130,7 @@ var WayPointIndex = (function () {
         configurable: true
     });
     WayPointIndex.prototype.increaseIndex = function () {
-        this._index++;
+        this.Index = this._index + 1;
     };
     return WayPointIndex;
 })();

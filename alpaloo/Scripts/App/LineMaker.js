@@ -51,21 +51,25 @@ if (!Array.prototype.indexOf) {
         return -1;
     };
 }
-function drawLines(ctx) {
+function drawLines() {
+    var ctx = canvas.getContext("2d");
     var lts = [], nums = [];
     contaOccorrenze(lts, nums);
     var larghezzaMappaX = canvas.width;
     var altezzaMappaY = canvas.height;
-    for (var i = 0; i < lts.length; i++) {
-        var x2 = getPoint(lts[i].liftStartLeft, larghezzaMappaX) + 35;
-        var x1 = getPoint(lts[i].liftEndLeft, larghezzaMappaX) + 35;
-        var y2 = getPoint(lts[i].liftStartTop, altezzaMappaY) + 65;
-        var y1 = getPoint(lts[i].liftEndTop, altezzaMappaY) + 65;
+    var xr = larghezzaMappaX / 36.08;
+    var yr = altezzaMappaY / 15.06;
+    for (var i = 0; i < indiceWayPoint.Index + 1; i += 2) {
+        var j = Math.floor(i / 2);
+        var x2 = getPoint(data.liftsTaken[j].liftStartLeft, larghezzaMappaX) + xr;
+        var x1 = getPoint(data.liftsTaken[j].liftEndLeft, larghezzaMappaX) + xr;
+        var y2 = getPoint(data.liftsTaken[j].liftStartTop, altezzaMappaY) + yr;
+        var y1 = getPoint(data.liftsTaken[j].liftEndTop, altezzaMappaY) + yr;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.lineWidth = 4;
-        ctx.strokeStyle = getHeatMap(nums[i]);
+        ctx.strokeStyle = getHeatMap(nums[j]);
         ctx.stroke();
         ctx.beginPath();
         ctx.arc(x1, y1, 5, 0, 2 * Math.PI, false);
@@ -76,36 +80,79 @@ function drawLines(ctx) {
         ctx.fillStyle = '#506d7a';
         ctx.fill();
     }
+    //for (var i = 0; i < lts.length; i++) {
+    //    var x2 = getPoint(lts[i].liftStartLeft, larghezzaMappaX) + 35;
+    //    var x1 = getPoint(lts[i].liftEndLeft, larghezzaMappaX) + 35;
+    //    var y2 = getPoint(lts[i].liftStartTop, altezzaMappaY) + 65 ;
+    //    var y1 = getPoint(lts[i].liftEndTop, altezzaMappaY) + 65;
+    //    ctx.beginPath();
+    //    ctx.moveTo(x1, y1);
+    //    ctx.lineTo(x2, y2);
+    //    ctx.lineWidth = 4;
+    //    ctx.strokeStyle = getHeatMap(nums[i]);
+    //    ctx.stroke();
+    //    ctx.beginPath();
+    //    ctx.arc(x1, y1, 5, 0, 2 * Math.PI, false);
+    //    ctx.fillStyle = '#506d7a';
+    //    ctx.fill();
+    //    ctx.beginPath();
+    //    ctx.arc(x2, y2, 5, 0, 2 * Math.PI, false);
+    //    ctx.fillStyle = '#506d7a';
+    //    ctx.fill();
+    //}
 }
+//function contaOccorrenze(a, b) {
+//    var prev: namespace.ILiftsTaken;
+//    var arr = data.liftsTaken.slice();
+//    arr.sort(function (lt1, lt2) {
+//        if (lt1.liftName < lt2.liftName)
+//            return -1;
+//        if (lt1.liftName > lt2.liftName)
+//            return 1;
+//        return 0;
+//    });
+//    for (var i = 0; i < arr.length; i++) {
+//        if (!LiftsTakenEquals(arr[i], prev)) {
+//            a.push(arr[i]);
+//            b.push(0);
+//        } else {
+//            b[b.length - 1]++;
+//        }
+//        prev = arr[i];
+//    }
+//    var s = squash(b);
+//    if (s.length = 2) {
+//        var m = Math.max(s[0], s[1]);
+//        for (var i = 0; i < b.length; i++) {
+//            if (b[i] == m) {
+//                b[i] = heatMap.length - 1;
+//            }
+//        }
+//    }
+//}
 function contaOccorrenze(a, b) {
-    var prev;
-    var arr = data.liftsTaken.slice();
-    arr.sort(function (lt1, lt2) {
-        if (lt1.liftName < lt2.liftName)
-            return -1;
-        if (lt1.liftName > lt2.liftName)
-            return 1;
-        return 0;
-    });
-    for (var i = 0; i < arr.length; i++) {
-        if (!LiftsTakenEquals(arr[i], prev)) {
-            a.push(arr[i]);
-            b.push(0);
-        }
-        else {
-            b[b.length - 1]++;
-        }
-        prev = arr[i];
+    var i, j;
+    var lt = data.liftsTaken;
+    for (i = 0, j = lt.length; i < j; i++) {
+        a.push(lt[i]);
+        b.push(findOccurrences(lt.slice(0, i), lt[i]));
     }
-    var s = squash(b);
-    if (s.length = 2) {
-        var m = Math.max(s[0], s[1]);
-        for (var i = 0; i < b.length; i++) {
-            if (b[i] == m) {
-                b[i] = heatMap.length - 1;
-            }
-        }
+    //    var s = squash(b);
+    //if (s.length = 2) {
+    //    var m = Math.max(s[0], s[1]);
+    //    for (i = 0; i < b.length; i++) {
+    //        if (b[i] == m) {
+    //            b[i] = heatMap.length - 1;
+    //        }
+    //    }
+    //}
+}
+function findOccurrences(arr, val) {
+    var i, j, count = 1;
+    for (i = 0, j = arr.length; i < j; i++) {
+        (LiftsTakenEquals(arr[i], val)) && count++;
     }
+    return count;
 }
 function getHeatMap(i) {
     if (i > heatMap.length)

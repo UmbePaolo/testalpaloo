@@ -1,4 +1,5 @@
 ﻿var Chart: any;
+var myLineChart: any;
 
 function loadGraph() {
 
@@ -18,6 +19,8 @@ function loadGraph() {
 
     var chartLiftNames = [];
 
+    var chartLifts = [];
+
     var chartOverrided = [];
 
     function getTime(arrAlt, date) {
@@ -29,6 +32,7 @@ function loadGraph() {
         return t;
 
     }
+
     var startOfDay = moment(data.liftsTaken[0].liftTime).startOf('day');
 
     $.each(data.liftsTaken, function (key, lift) {
@@ -75,9 +79,13 @@ function loadGraph() {
         chartLiftLabels.push('');
         chartLiftLabels.push('');
 
+        chartLifts.push(lift);
+        chartLifts.push(lift);
+        chartLifts.push(lift);
+
         chartLiftNames.push(lift.liftName);
-        chartLiftNames.push('');
-        chartLiftNames.push('');
+        chartLiftNames.push(lift.liftName);
+        chartLiftNames.push(lift.liftName);
 
 
         chartLiftSeconds.push(Math.abs(startOfDay.diff(lift.liftTime, 'seconds')));
@@ -216,25 +224,30 @@ function loadGraph() {
                 function getBody(bodyItem) {
                     return bodyItem.lines;
                 }
+                var indice = tooltip.dataPoints[0].index;
+                var lift = <namespace.ILiftsTaken>chartLifts[indice];
                 // Set Text
                 if (tooltip.body) {
-                    var lift = data.liftsTaken[tooltip.dataPoints[0].index];
+                    var liftName = chartLiftNames[indice];
+                    var d = chartLiftData[indice];
+                    var i = lift.icon;
+                    var custImg = '';
+                    if (i) {
+                        custImg = 'img/' + i.replace("svg", "png");
+                    }
                     var titleLines = tooltip.title || [];
                     var bodyLines = tooltip.body.map(getBody);
-                    var innerHtml = '<thead>';
-                    titleLines.forEach(function (title) {
-                        innerHtml += '<tr><th>' + title + '</th></tr>';
-                    });
-                    innerHtml += '</thead><tbody>';
+                    var innerHtml = '<tr><td rowspan="2">' + '<img src="' + custImg + '" title="" alt="" border="0">' + '</td>';
+                    innerHtml += '<th>' + liftName + '</th></tr>';
+
                     bodyLines.forEach(function (body, i) {
                         var colors = tooltip.labelColors[i];
                         var style = 'background:' + colors.backgroundColor;
                         style += '; border-color:' + colors.borderColor;
                         style += '; border-width: 2px';
                         var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
-                        innerHtml += '<tr><td>' + span + body + '</td></tr>';
+                        innerHtml += '<tr><td>' + span + d + ' mt</td></tr>';
                     });
-                    innerHtml += '</tbody>';
                     var tableRoot = <HTMLTableElement>tooltipEl.querySelector('table');
                     tableRoot.innerHTML = innerHtml;
                 }
@@ -249,14 +262,10 @@ function loadGraph() {
                 tooltipEl.style.fontSize = tooltip.fontSize;
                 tooltipEl.style.fontStyle = tooltip._fontStyle;
                 tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+
+                doMoveAtPoint(Math.round(indice * 2 / 3));
             }
         },
-        //tooltips: {
-        //    enabled: true,
-        //    backgroundColor: '#506d7a',
-        //    cornerRadius: 15,
-        //    titleFontSize: 16
-        //},
         scales: {
             yAxes: [
                 {
@@ -264,7 +273,7 @@ function loadGraph() {
                     type: 'linear',
                     display: true,
                     position: 'left',
-                    
+
                     gridLines: {
 
                         display: true
@@ -347,7 +356,7 @@ function loadGraph() {
         ]
     };
 
-    var myBarChart = new Chart(ctx, {
+    myLineChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
         options: liftChartOptions
