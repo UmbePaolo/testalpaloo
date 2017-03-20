@@ -20,7 +20,7 @@ namespace alpaloo
                 Directory.CreateDirectory(contentPath);
             }
 
-            string fileNameWitPath = Path.Combine(contentPath , name + DateTime.Now.Ticks + ".gif");
+            string fileNameWitPath = Path.Combine(contentPath , name + DateTime.Now.Ticks + ".png");
 
             using (FileStream fs = new FileStream(fileNameWitPath, FileMode.Create))
             {

@@ -29,7 +29,7 @@ $(document).ready(function () {
     SetToken();
     avatar = $("#avatar");
     jQuery(document).on('click', '#divFB', function (e) {
-        ShareFB2();
+        ShareFB();
     });
 });
 

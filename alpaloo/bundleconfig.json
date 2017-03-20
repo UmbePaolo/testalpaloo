@@ -1,11 +1,5 @@
 [
   {
-    "outputFileName": "Scripts/App/CustomGraph.min.js",
-    "inputFiles": [
-      "Scripts/App/CustomGraph.js"
-    ]
-  },
-  {
     "outputFileName": "Scripts/App/custom.js",
     "inputFiles": [
       "Scripts/App/ApiCaller.js",
